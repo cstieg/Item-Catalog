@@ -1,0 +1,18 @@
+application: itemcatalog-163806
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /.*
+  script: itemcatalog.app
+  
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /js
+  static_dir: js
+
+libraries:
+- name: jinja2
+  version: latest

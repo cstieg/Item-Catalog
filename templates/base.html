@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/stylesheets/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://apis.google.com/js/platform.js?onload=start"></script>
     <script src="/js/main.js"></script>
   </head>
   <body>
@@ -24,8 +25,9 @@
       <p class="tagline">Find great stuff</p>
       <hr>
     </header>
+    <div id="result"></div>
 
     {% block content %}{% endblock %}
-
+    <span id="state">{{state}}</span>
   </body>
 </html>

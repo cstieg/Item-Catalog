@@ -3,9 +3,8 @@
 
 create project in google app engine
 download google cloud sdk (https://cloud.google.com/sdk/docs/)
-gcloud components install app-engine-python-extras
 pip install -t lib -r requirements.txt
-pip install --target lib --upgrade click==5.1
+
 dev_appserver.py app.yaml
 
 

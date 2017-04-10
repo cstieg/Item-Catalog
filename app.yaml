@@ -4,14 +4,14 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /.*
-  script: itemcatalog.app
-  
-- url: /stylesheets
+- url: /stylesheets/
   static_dir: stylesheets
 
 - url: /js
   static_dir: js
+
+- url: /.*
+  script: itemcatalog.app
 
 libraries:
 - name: jinja2

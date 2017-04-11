@@ -12,11 +12,16 @@
     <script src="/js/main.js"></script>
   </head>
   <body>
+    {% if message %}
+      <p id="message">
+        {{message}}
+      </p>
+    {% endif %}
     <header>
       <div class="login">
         {% if username %}
           <span class="welcome">Hello, {{username}}!</span>
-          <span class="logout"> <a href="/logout">logout</a></span>
+          <span class="logout"><a href="/logout">logout</a></span>
         {% else %}
           <a href="/login">login</a>
         {% endif %}

@@ -12,8 +12,8 @@ def check_signed_in(func):
         if 'username' in flask.session:
             return func(*args, **kwargs)
         else:
-            logging.info('redirecting to signin')
-            return flask.redirect('/signin')
+            logging.info('redirecting to login')
+            return flask.redirect(flask.url_for(login_handler))
     return wrapper
 
 

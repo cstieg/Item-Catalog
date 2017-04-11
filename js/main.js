@@ -10,7 +10,7 @@ function signInCallback(authResult) {
       processData: false,
       data: authResult['code'],
       contentType: 'application/octet-stream; charset=utf-8',
-      success: function(result) {
+      complete: function(result) {
         // Handle or verify the server response if necessary.
         if (result) {
           $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...');
@@ -24,9 +24,6 @@ function signInCallback(authResult) {
         else {
           $('#result').html('Failed to make a server-side call. Check your configuration and console.');
         }
-      },
-      error: function(result) {
-        $('#result').html('Login failed!</br>'+ result);
       }
     });
   }

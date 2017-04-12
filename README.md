@@ -7,7 +7,8 @@ pip install -t lib -r requirements.txt
 
 dev_appserver.py app.yaml
 
-
+add {item_catalog}/lib to pythonpath
+gcloud auth application-default login
 
 windows can cause an issue with python
 must ensure value in HKEY_CLASSES_ROOT\Applications\python.exe\shell\open\command in regedit equals

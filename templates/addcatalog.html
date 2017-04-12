@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Add catalog</h2>
+
+  <form id="add-catalog" class="catalog-form" method="post" action="addcatalog" enctype="multipart/form-data">
+    <label>
+      <p>Name</p>
+      <input name="name" type="text" value="{{catalog.name}}">
+    </label><br>
+    <label>
+      <p>Description</p>
+      <input name="description" type="text" value="{{catalog.description}}">
+    </label><br>
+    <label>
+      <p>Cover Photo</p>
+      <input name="cover_picture" type="file" value="{{catalog.cover_picture}}">
+    </label><br>
+    <input name="submit" type="submit">
+  </form>
+
+{% endblock content %}

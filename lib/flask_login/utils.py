@@ -59,9 +59,9 @@ def decode_cookie(cookie):
 def make_next_param(login_url, current_url):
     '''
     Reduces the scheme and host from a given URL so it can be passed to
-    the given `login` URL more efficiently.
+    the given `user_login` URL more efficiently.
 
-    :param login_url: The login URL being redirected to.
+    :param login_url: The user_login URL being redirected to.
     :type login_url: str
     :param current_url: The URL to reduce.
     :type current_url: str
@@ -77,15 +77,15 @@ def make_next_param(login_url, current_url):
 
 def login_url(login_view, next_url=None, next_field='next'):
     '''
-    Creates a URL for redirecting to a login page. If only `login_view` is
+    Creates a URL for redirecting to a user_login page. If only `login_view` is
     provided, this will just return the URL for it. If `next_url` is provided,
     however, this will append a ``next=URL`` parameter to the query string
-    so that the login view can redirect back to that URL.
+    so that the user_login view can redirect back to that URL.
 
-    :param login_view: The name of the login view. (Alternately, the actual
-                       URL to the login view.)
+    :param login_view: The name of the user_login view. (Alternately, the actual
+                       URL to the user_login view.)
     :type login_view: str
-    :param next_url: The URL to give the login view for redirection.
+    :param next_url: The URL to give the user_login view for redirection.
     :type next_url: str
     :param next_field: What field to store the next URL in. (It defaults to
                        ``next``.)
@@ -108,7 +108,7 @@ def login_url(login_view, next_url=None, next_field='next'):
 
 def login_fresh():
     '''
-    This returns ``True`` if the current login is fresh.
+    This returns ``True`` if the current user_login is fresh.
     '''
     return session.get('_fresh', False)
 
@@ -212,7 +212,7 @@ def login_required(func):
 
         Per `W3 guidelines for CORS preflight requests
         <http://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0>`_,
-        HTTP ``OPTIONS`` requests are exempt from login checks.
+        HTTP ``OPTIONS`` requests are exempt from user_login checks.
 
     :param func: The view function to decorate.
     :type func: function
@@ -232,7 +232,7 @@ def login_required(func):
 def fresh_login_required(func):
     '''
     If you decorate a view with this, it will ensure that the current user's
-    login is fresh - i.e. their session was not restored from a 'remember me'
+    user_login is fresh - i.e. their session was not restored from a 'remember me'
     cookie. Sensitive operations, like changing a password or e-mail, should
     be protected with this, to impede the efforts of cookie thieves.
 
@@ -248,7 +248,7 @@ def fresh_login_required(func):
 
         Per `W3 guidelines for CORS preflight requests
         <http://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0>`_,
-        HTTP ``OPTIONS`` requests are exempt from login checks.
+        HTTP ``OPTIONS`` requests are exempt from user_login checks.
 
     :param func: The view function to decorate.
     :type func: function
@@ -269,12 +269,12 @@ def fresh_login_required(func):
 
 def set_login_view(login_view, blueprint=None):
     '''
-    Sets the login view for the app or blueprint. If a blueprint is passed,
-    the login view is set for this blueprint on ``blueprint_login_views``.
+    Sets the user_login view for the app or blueprint. If a blueprint is passed,
+    the user_login view is set for this blueprint on ``blueprint_login_views``.
 
     :param login_view: The user object to log in.
     :type login_view: str
-    :param blueprint: The blueprint which this login view should be set on.
+    :param blueprint: The blueprint which this user_login view should be set on.
         Defaults to ``None``.
     :type blueprint: object
     '''

@@ -47,10 +47,10 @@ class LoginManager(object):
         #: :attr:`login_view` will be used instead.
         self.blueprint_login_views = {}
 
-        #: The message to flash when a user is redirected to the login page.
+        #: The message to flash when a user is redirected to the user_login page.
         self.login_message = LOGIN_MESSAGE
 
-        #: The message category to flash when a user is redirected to the login
+        #: The message category to flash when a user is redirected to the user_login
         #: page.
         self.login_message_category = LOGIN_MESSAGE_CATEGORY
 
@@ -127,11 +127,11 @@ class LoginManager(object):
 
             - Flash :attr:`LoginManager.login_message` to the user.
 
-            - If the app is using blueprints find the login view for
+            - If the app is using blueprints find the user_login view for
               the current blueprint using `blueprint_login_views`. If the app
-              is not using blueprints or the login view for the current
+              is not using blueprints or the user_login view for the current
               blueprint is not specified use the value of `login_view`.
-              Redirect the user to the login view. (The page they were
+              Redirect the user to the user_login view. (The page they were
               attempting to access will be passed in the ``next`` query
               string variable, so you can redirect there if present instead
               of the homepage.)

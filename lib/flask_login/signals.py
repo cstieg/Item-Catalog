@@ -33,10 +33,10 @@ user_loaded_from_header = _signals.signal('loaded-from-header')
 #: is the #: sender), it is passed `user`, which is the user being reloaded.
 user_loaded_from_request = _signals.signal('loaded-from-request')
 
-#: Sent when a user's login is confirmed, marking it as fresh. (It is not
-#: called for a normal login.)
+#: Sent when a user's user_login is confirmed, marking it as fresh. (It is not
+#: called for a normal user_login.)
 #: It receives no additional arguments besides the app.
-user_login_confirmed = _signals.signal('login-confirmed')
+user_login_confirmed = _signals.signal('user_login-confirmed')
 
 #: Sent when the `unauthorized` method is called on a `LoginManager`. It
 #: receives no additional arguments besides the app.

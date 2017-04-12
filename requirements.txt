@@ -3,3 +3,6 @@ jinja2
 click==5.1
 google-api-python-client
 oauth2client
+gcloud
+google-cloud-storage
+GoogleAppEngineCloudStorageClient

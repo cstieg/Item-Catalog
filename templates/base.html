@@ -12,11 +12,16 @@
     <script src="/js/main.js"></script>
   </head>
   <body>
-    {% if message %}
-      <p id="message">
-        {{message}}
-      </p>
-    {% endif %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <header>
       <div class="login">
         {% if username %}

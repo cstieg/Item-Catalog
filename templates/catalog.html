@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{catalog.name}}</h2>
+  <p>
+    {{catalog.description}}
+  </p>
+  <img src="{{catalog.cover_picture}}"
+
+  <p id="editcatalog">
+    <a href="/editcatalog/{{catalog.key.id()}}">Edit Catalog</a>
+  </p>
+
+{% endblock content %}

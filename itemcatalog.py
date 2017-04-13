@@ -10,6 +10,9 @@ app.secret_key = 'ZAwsBF5SZD6#QzwRnDvakmJ5xp4d7XqRaxX#^V!T'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['DEBUG'] = True
+app.config['TESTING'] = True
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
 GCLOUD_STORAGE_BUCKET = 'itemcatalog-163806.appspot.com'
 PROJECT_ID = 'itemcatalog-163806'

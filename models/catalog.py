@@ -1,3 +1,4 @@
+import logging
 from google.appengine.ext import ndb
 from user_login import User
 
@@ -11,3 +12,9 @@ class Catalog(ndb.Model):
 
     def user_can_edit(self, user):
         return user == self.owner or user in self.editors
+
+
+def get_catalogs(catalog_id=None):
+    if catalog_id:
+        return Catalog.get_by_id(catalog_id)
+    return Catalog.query()

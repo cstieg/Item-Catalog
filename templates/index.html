@@ -3,8 +3,17 @@
 {% block content %}
   <h2>Main Page</h2>
 
+  {% for catalog in catalogs %}
+    <article class="catalog">
+      <a href="">
+        <img src="{{catalog.cover_picture}}">
+        <h3>{{catalog.name}}</h3>
+        <h4>{{catalog.description}}</h4>
+      </a>
+    </article>
+  {% endfor %}
 
-  <p id=addcatalog>
+  <p id="addcatalog">
     <a href="/addcatalog">Add Catalog</a>
   </p>
 

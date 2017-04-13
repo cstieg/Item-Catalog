@@ -4,10 +4,16 @@ import models
 import login
 import uploadfile
 import helper
-from models import User
+import models
+
+def catalog_view(catalog_id):
+    username = flask.session.get('username')
+    catalog = models.get_catalogs(int(catalog_id))
+    if not catalog:
+        flask.flash('Could not find catalog with id %s!' % catalog_id)
+    return flask.render_template('catalog.html', username=username, catalog=catalog)
 
 def add_new_catalog(form_data, files):
-    logging.info(form_data)
     try:
         cover_picture_obj = files.get('cover_picture')
         cover_picture_url = uploadfile.save_file(cover_picture_obj)
@@ -21,7 +27,7 @@ def add_new_catalog(form_data, files):
                                      cover_picture=cover_picture_url,
                                      owner=owner_key)
         new_catalog.put()
-        return helper.success_response()
+        return flask.redirect('/catalog/%d' % new_catalog.key.id())
     except IOError:
         return ('Failed to add new catalog', 401)
 

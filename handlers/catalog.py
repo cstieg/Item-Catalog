@@ -31,3 +31,9 @@ def add_new_catalog(form_data, files):
     except IOError:
         return ('Failed to add new catalog', 401)
 
+def edit_catalog_view(catalog_id):
+    username = flask.session.get('username')
+    catalog = models.get_catalogs(int(catalog_id))
+    if not catalog:
+        flask.flash('Could not find catalog with id %s!' % catalog_id)
+    return flask.render_template('editcatalog.html', username=username, catalog=catalog)

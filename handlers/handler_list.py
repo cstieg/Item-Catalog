@@ -9,7 +9,7 @@ import handlers
 from itemcatalog import app
 
 @app.route('/')
-def main_page_handler():
+def main_page_handler(methods=['GET']):
     username = flask.session.get('username')
     catalogs = models.get_catalogs()
     return flask.render_template('index.html', username=username, catalogs=catalogs)
@@ -30,7 +30,7 @@ def login_handler():
 def google_login_handler():
     return gconnect.connect_google_user(flask.request.data)
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET'])
 def logout_handler():
     return logout.logout()
 
@@ -42,6 +42,14 @@ def add_catalog_handler():
         return flask.render_template('addcatalog.html', username=username, catalog=None)
     elif flask.request.method == 'POST':
         return catalog.add_new_catalog(flask.request.form, flask.request.files)
+
+@decorators.check_signed_in
+@app.route('/editcatalog/<catalog_id>', methods=['GET', 'POST'])
+def edit_catalog_handler(catalog_id):
+    if flask.request.method == 'GET':
+        return handlers.edit_catalog_view(catalog_id)
+    elif flask.request.method == 'POST':
+        return ''
 
 class InvalidUsage(Exception):
     status_code = 400

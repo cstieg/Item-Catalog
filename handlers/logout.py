@@ -1,11 +1,11 @@
 import flask
-import logging
 import gconnect
 from werkzeug.exceptions import BadRequest
+from itemcatalog import app
 
-def logout():
+@app.route('/logout', methods=['GET'])
+def logout_handler():
     username = flask.session.get('username')
-    logging.info(username)
     if not username:
         logging.info('Already logged out!')
         return flask.redirect(flask.url_for('main_page_handler'))

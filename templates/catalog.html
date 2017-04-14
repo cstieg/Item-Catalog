@@ -5,10 +5,28 @@
   <p>
     {{catalog.description}}
   </p>
-  <img src="{{catalog.cover_picture}}"
+  <img src="{{catalog.cover_picture}}">
+
+  {% if categories %}
+    {% for category in categories if categories %}
+      <div class="category">
+        <h3>{{category.name}}</h3>
+        <h4>{{category.description}}</h4>
+
+
+
+
+
+      </div>
+    {% endfor %}
+  {% endif %}
 
   <p id="editcatalog">
     <a href="/editcatalog/{{catalog.key.id()}}">Edit Catalog</a>
+  </p>
+
+  <p id="addcategory">
+    <a href="/catalog/{{catalog.key.id()}}/addcategory">Add Category</a>
   </p>
 
 {% endblock content %}

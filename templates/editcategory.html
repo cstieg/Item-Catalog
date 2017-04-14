@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% block heading %}
+  <h2>Edit category {{category.name}} in {{catalog.name}}</h2>
+
+  <form id="edit-category" class="category-form" method="post"
+      action="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
+      enctype="multipart/form-data">
+    {% endblock heading %}
+    <input name="catalog_id" type="hidden" value="{{catalog.key.id()}}">
+    <label>
+      <p>Name</p>
+      <input name="name" type="text" value="{{category.name}}">
+    </label><br>
+    <label>
+      <p>Description</p>
+      <input name="description" type="text" value="{{category.description}}">
+    </label><br>
+    <input name="submit" type="submit">
+  </form>
+  {% block delete %}
+  <form id="delete-category" method="post" action="/catalog/{{catalog.key.id()}}/deletecategory/{{category.key.id()}}">
+    <input name="delete" type="submit" value="Delete Category">
+  </form>
+  {% endblock delete %}
+
+{% endblock content %}

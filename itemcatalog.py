@@ -17,4 +17,4 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 GCLOUD_STORAGE_BUCKET = 'itemcatalog-163806.appspot.com'
 PROJECT_ID = 'itemcatalog-163806'
 
-from handlers.handler_list import *
+from handlers import *

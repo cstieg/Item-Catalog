@@ -1,24 +1,26 @@
 import logging
 import flask
 import json
-import httplib2
-import werkzeug
 import oauth2client.client
 from google.appengine.api import urlfetch
+from werkzeug.exceptions import HTTPException, BadRequest, Unauthorized, InternalServerError
 
-from helper import http_response, success_response
+import responses
 from models import user_login
+from itemcatalog import app
 
-def connect_google_user(code):
+@app.route('/gconnect', methods=['POST'])
+def google_login_handler():
+    code = flask.request.data
     try:
         credentials = get_google_credentials(code)
     except oauth2client.client.FlowExchangeError:
-        return http_response('Failed to upgrade the authorization code.', 401)
+        raise Unauthorized('Failed to upgrade the Google authorization code.')
 
     try:
         data = get_google_user_info(credentials.access_token)
     except:
-        return http_response('Error retrieving user info!', response.status_code)
+        raise HTTPException('Error retrieving user info from Google!', response)
 
     flask.session['provider'] = 'google'
     flask.session['username'] = data['name']
@@ -29,9 +31,9 @@ def connect_google_user(code):
     # Create user if not in database
     new_user = user_login.create_user(data['email'], data['name'], 'google', data['picture'])
     if not new_user:
-        return http_response('Could not create new user!', 401)
+        raise InternalServerError('Could not create new user!')
 
-    return success_response()
+    return responses.success()
 
 def get_google_credentials(code):
     # Upgrade the authorization code into a credentials object
@@ -50,7 +52,7 @@ def get_google_user_info(access_token):
         method=urlfetch.GET)
 
     if response.status_code >= 400:
-        raise werkzeug.exceptions.BadRequest('Cannot access user information!')
+        raise HTTPException('Cannot access user information from Google!', response)
 
     return json.loads(response.content)
 
@@ -62,6 +64,6 @@ def disconnect_google_user():
     logging.info(response.status_code)
 
     if response.status_code >= 400:
-        raise werkzeug.exceptions.BadRequest('Failed to revoke token for user')
+        raise HTTPException('Failed to revoke token for user', response)
 
 

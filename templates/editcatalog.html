@@ -20,8 +20,10 @@
     </label><br>
     <input name="submit" type="submit">
   </form>
+  {% block delete %}
   <form id="delete-catalog" method="post" action="/deletecatalog/{{catalog.key.id()}}">
     <input name="delete" type="submit" value="Delete Catalog">
   </form>
+  {% endblock delete %}
 
 {% endblock content %}

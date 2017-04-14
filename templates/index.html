@@ -5,7 +5,7 @@
 
   {% for catalog in catalogs %}
     <article class="catalog">
-      <a href="/editcatalog/{{catalog.key.id()}}">
+      <a href="/catalog/{{catalog.key.id()}}">
         <img src="{{catalog.cover_picture}}">
         <h3>{{catalog.name}}</h3>
       </a>

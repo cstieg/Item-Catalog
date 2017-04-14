@@ -1,4 +1,5 @@
 from catalog import *
+from category import *
 from decorators import *
 from gconnect import *
 from handler_list import *

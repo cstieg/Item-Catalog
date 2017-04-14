@@ -56,6 +56,16 @@ def edit_catalog_handler(catalog_id):
 def delete_catalog_handler(catalog_id):
     return handlers.delete_catalog(catalog_id)
 
+@decorators.check_signed_in
+@app.route('/catalog/<catalog_id>/addcategory', methods=['GET', 'POST'])
+def add_category_handler(catalog_id):
+    username = flask.session.get('username')
+    if flask.request.method == 'GET':
+        catalog = models.get_catalogs(int(catalog_id))
+        return flask.render_template('addcategory.html', username=username, catalog=catalog, category=None)
+    if flask.request.method == 'POST':
+        return handlers.add_new_category(catalog_id, flask.request.form, flask.request.files)
+
 class InvalidUsage(Exception):
     status_code = 400
 

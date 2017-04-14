@@ -18,3 +18,13 @@ def get_catalogs(catalog_id=None):
     if catalog_id:
         return Catalog.get_by_id(catalog_id)
     return Catalog.query()
+
+def delete_catalog(catalog_id):
+    if not catalog_id:
+        raise ValueError('Must pass a valid catalog_id!')
+    catalog = get_catalogs(catalog_id)
+    if not catalog:
+        raise ValueError('Catalog not found!')
+    catalog.key.delete()
+
+    # TODO: delete related data

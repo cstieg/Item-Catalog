@@ -49,7 +49,12 @@ def edit_catalog_handler(catalog_id):
     if flask.request.method == 'GET':
         return handlers.edit_catalog_view(catalog_id)
     elif flask.request.method == 'POST':
-        return ''
+        return handlers.edit_catalog(catalog_id, flask.request.form, flask.request.files)
+
+@decorators.check_signed_in
+@app.route('/deletecatalog/<catalog_id>', methods=['POST'])
+def delete_catalog_handler(catalog_id):
+    return handlers.delete_catalog(catalog_id)
 
 class InvalidUsage(Exception):
     status_code = 400

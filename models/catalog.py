@@ -22,9 +22,9 @@ def get_catalogs(catalog_id=None):
 def delete_catalog(catalog_id):
     if not catalog_id:
         raise ValueError('Must pass a valid catalog_id!')
-    catalog = get_catalogs(catalog_id)
-    if not catalog:
+    catalog_entity = get_catalogs(catalog_id)
+    if not catalog_entity:
         raise ValueError('Catalog not found!')
-    catalog.key.delete()
+    catalog_entity.key.delete()
 
     # TODO: delete related data

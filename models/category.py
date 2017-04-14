@@ -22,3 +22,15 @@ def get_categories(catalog_id, category_id=None):
             logging.error('Category does not match catalog!')
         return category_entity
     return Category.query(Category.catalog == catalog_entity.key)
+
+
+def delete_category(catalog_id, category_id):
+    if not catalog_id or not category_id:
+        raise ValueError('Must pass a valid catalog_id!')
+    category_entity = get_categories(catalog_id, category_id)
+    if not category_entity:
+        raise ValueError('Category not found!')
+
+    category_entity.key.delete()
+
+    # TODO: delete related data

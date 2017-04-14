@@ -49,3 +49,21 @@ def edit_category_handler(catalog_id, category_id):
         category_entity.description = flask.request.form.get('description')
         category_entity.put()
         return flask.redirect('/catalog/%d' % catalog_entity.key.id())
+
+@login.check_logged_in
+@app.route('/catalog/<catalog_id>/deletecategory/<category_id>', methods=['POST'])
+def delete_category_handler(catalog_id, category_id):
+    username = flask.session.get('username')
+    catalog_id = int(catalog_id)
+    catalog_entity = models.get_catalogs(catalog_id)
+    if not catalog_entity:
+        raise BadRequest('Could not find catalog with id %d' % catalog_id)
+
+    category_id = int(category_id)
+    category_entity = models.get_categories(catalog_id, category_id)
+    if not (category_entity):
+        raise BadRequest('Could not find category with id %d!' % category_id)
+
+    elif flask.request.method == 'POST':
+        models.delete_category(catalog_id, category_id)
+        return flask.redirect('/catalog/%d' % catalog_entity.key.id())

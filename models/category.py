@@ -17,7 +17,8 @@ def get_categories(catalog_id, category_id=None):
         logging.error('Catalog not found!')
         return None
     if category_id:
-        category = Category.get_by_id(category_id)
-        if category.catalog != catalog_entity.key:
+        category_entity = Category.get_by_id(category_id)
+        if category_entity.catalog != catalog_entity.key:
             logging.error('Category does not match catalog!')
+        return category_entity
     return Category.query(Category.catalog == catalog_entity.key)

@@ -19,7 +19,7 @@ def catalog_view_handler(catalog_id):
     catalog_id = int(catalog_id)
     catalog = models.get_catalogs(catalog_id)
     if not catalog:
-        flask.flash('Could not find catalog with id %d!' % catalog_id)
+        raise BadRequest('Could not find catalog with id %d!' % catalog_id)
     categories = models.get_categories(catalog_id)
     return flask.render_template('catalog.html', username=username, catalog=catalog, categories=categories)
 
@@ -54,8 +54,7 @@ def edit_catalog_handler(catalog_id):
     catalog = models.get_catalogs(catalog_id)
     username = flask.session.get('username')
     if not catalog:
-        flask.flash('Could not find catalog with id %d!' % catalog_id)
-        raise BadRequest
+        raise BadRequest('Could not find catalog with id %d!' % catalog_id)
 
     if flask.request.method == 'GET':
         return flask.render_template('editcatalog.html', username=username, catalog=catalog)
@@ -81,7 +80,6 @@ def delete_catalog_handler(catalog_id):
     catalog_id = int(catalog_id)
     catalog = models.get_catalogs(catalog_id)
     if not catalog:
-        flask.flash('Could not find catalog with id %d!' % catalog_id)
-        raise BadRequest
+        raise BadRequest('Could not find catalog with id %d!' % catalog_id)
     models.delete_catalog(catalog_id)
     return flask.redirect('/')

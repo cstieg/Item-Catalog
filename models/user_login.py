@@ -1,4 +1,3 @@
-import logging
 from google.appengine.ext import ndb
 
 # TODO: Add validators for entity fields
@@ -14,10 +13,7 @@ class User(ndb.Model):
     picture = ndb.StringProperty(indexed=False)
 
 def find_user_by_email(email):
-    logging.info(email)
-    user = User.query(User.email == email).get()
-    logging.info(user)
-    return user
+    return User.query(User.email == email).get()
 
 def create_user(email, name, provider, picture):
     existing_user = find_user_by_email(email)

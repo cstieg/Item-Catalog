@@ -13,16 +13,17 @@ class Catalog(ndb.Model):
     def user_can_edit(self, user):
         return user == self.owner or user in self.editors
 
+def get_catalog_by_id(catalog_id):
+    if not catalog_id:
+        logging.error('Must pass catalog_id!')
+        return None
+    return Catalog.get_by_id(catalog_id)
 
-def get_catalogs(catalog_id=None):
-    if catalog_id:
-        return Catalog.get_by_id(catalog_id)
+def get_catalogs():
     return Catalog.query()
 
 def delete_catalog(catalog_id):
-    if not catalog_id:
-        raise ValueError('Must pass a valid catalog_id!')
-    catalog_entity = get_catalogs(catalog_id)
+    catalog_entity = get_catalog_by_id(catalog_id)
     if not catalog_entity:
         raise ValueError('Catalog not found!')
     catalog_entity.key.delete()

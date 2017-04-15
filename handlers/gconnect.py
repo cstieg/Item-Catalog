@@ -64,6 +64,6 @@ def disconnect_google_user():
     logging.info(response.status_code)
 
     if response.status_code >= 400:
-        raise HTTPException('Failed to revoke token for user', response)
+        raise BadRequest('Failed to revoke token for user')
 
 

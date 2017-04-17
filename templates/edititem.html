@@ -4,7 +4,7 @@
   {% block heading %}
   <h2>Edit item {{item.name}} in {{catalog.name}}</h2>
 
-  <form id="edit-item" class="item-form" method="post"
+  <form id="edit-item" class="edit-form" method="post"
       action="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}"
       enctype="multipart/form-data">
     {% endblock heading %}
@@ -34,13 +34,15 @@
         {% endfor %}
       </select>
     </label><br>
-    <input name="submit" type="submit">
+    <div class="bottom-button-row">
+      <button name="cancel" class="bottom-button" onclick="window.history.back()">Cancel</button>
+      <input name="submit" type="submit" class="bottom-button">
+      {% block delete %}
+        <button name="delete" class="bottom-button" onclick="deleteItem(catalog.key.id(), item.key.id())">Delete Item</button>
+      {% endblock delete %}
+    </div>
   </form>
-  {% block delete %}
-  <form id="delete-item" method="post" action="/catalog/{{catalog.key.id()}}/deleteitem/{{item.key.id()}}">
-    <input name="delete" type="submit" value="Delete Item">
-  </form>
-  {% endblock delete %}
+
 
 
 {% endblock content %}

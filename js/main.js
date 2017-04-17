@@ -64,6 +64,28 @@ function googleLogout() {
 }
 
 
+function deleteCatalog(catalogID) {
+  $.ajax({
+    type: 'POST',
+    url: '/deletecatalog/' + catalogID
+  });
+}
+
+function deleteCategory(catalogID, categoryID) {
+  $.ajax({
+    type: 'POST',
+    url: '/catalog/' + catalogID + "/deletecategory/" + categoryID
+  });
+}
+
+function deleteItem(catalogID, itemID) {
+  $.ajax({
+    type: 'POST',
+    url: '/catalog/' + catalogID + "/deleteitem/" + itemID
+  });
+}
+
+
 $(window).resize(function() {
   $('.catalog-picture').height($('.catalog-picture').width());
   $('.item-picture').height($('.item-picture').width());

@@ -69,6 +69,33 @@ main {
   margin: 5px;
 }
 
+.title-edit {
+  text-align: center;
+}
+
+.edit-form {
+  min-width: 300px;
+  width: 60%;
+  border: thin black solid;
+  background-color: lightpink;
+  padding: 20px;
+  margin: 10px auto;
+}
+
+.edit-form label,
+.edit-form input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.bottom-button-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.bottom-button {
+  margin-right: 20px;
+}
 
 /*Google Signin Button Style*/
 

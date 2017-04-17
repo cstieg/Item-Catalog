@@ -2,28 +2,30 @@
 
 {% block content %}
   {% block heading %}
-  <h2>Edit category {{category.name}} in {{catalog.name}}</h2>
+  <h2 class="title-edit">Edit category {{category.name}} in {{catalog.name}}</h2>
 
-  <form id="edit-category" class="category-form" method="post"
+  <form id="edit-category" class="edit-form" method="post"
       action="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
       enctype="multipart/form-data">
     {% endblock heading %}
-    <input name="catalog_id" type="hidden" value="{{catalog.key.id()}}" required>
+    <input name="catalog_id" type="hidden" value="{{catalog.key.id()}}">
     <label>
       <p>Name</p>
-      <input name="name" type="text" value="{{category.name}}">
+      <input name="name" type="text" value="{{category.name}}" required>
     </label><br>
     <label>
       <p>Description</p>
       <input name="description" type="text" value="{{category.description}}">
     </label><br>
-    <input name="submit" type="submit">
+    <div class="bottom-button-row">
+      <button name="cancel" class="bottom-button" onclick="window.history.back()">Cancel</button>
+      <input name="submit" type="submit" class="bottom-button">
+      {% block delete %}
+        <button name="delete" class="bottom-button" onclick="deleteCategory(catalog.key.id(), category.key.id())">Delete Category</button>
+      {% endblock delete %}
+    </div>
   </form>
-  {% block delete %}
-  <form id="delete-category" method="post" action="/catalog/{{catalog.key.id()}}/deletecategory/{{category.key.id()}}">
-    <input name="delete" type="submit" value="Delete Category">
-  </form>
-  {% endblock delete %}
+
 
 
 

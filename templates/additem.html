@@ -1,9 +1,9 @@
 {% extends "edititem.html" %}
 
 {% block heading %}
-  <h2>Add item</h2>
+  <h2 class="title-edit">Add item</h2>
 
-  <form id="add-item" class="item-form" method="post"
+  <form id="add-item" class="edit-form" method="post"
       action="/catalog/{{catalog.key.id()}}/additem"
       enctype="multipart/form-data">
 {% endblock heading %}

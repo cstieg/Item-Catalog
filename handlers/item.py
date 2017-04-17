@@ -120,5 +120,4 @@ def delete_item_handler(catalog_id, item_id):
         raise BadRequest('Could not find item with id %d!' % item_id)
 
     models.delete_item(catalog_id, item_id)
-    models.wait_for(item_entity)
     return flask.redirect('/catalog/%d' % catalog_entity.key.id())

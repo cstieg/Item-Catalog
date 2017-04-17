@@ -25,3 +25,4 @@ def wait_for(entity, incremental_wait_time=0.100, max_wait_time=2.000):
     while entity_kind.query(entity_kind.name == entity.name).count(1) == 0 and \
                             time.clock() < start_time + max_wait_time:
         time.sleep(incremental_wait_time)
+

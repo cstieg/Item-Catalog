@@ -9,7 +9,7 @@
 
   </div>
   {% for catalog in catalogs %}
-    <article class="catalog col-md-4 col-sm-6 col-xs-12">
+    <article id="{{catalog.key.id()}}" class="catalog col-md-4 col-sm-6 col-xs-12">
       <a href="/catalog/{{catalog.key.id()}}">
         <img class="catalog-picture" src="{{catalog.cover_picture}}">
       </a>
@@ -22,7 +22,7 @@
           <a href="/editcatalog/{{catalog.key.id()}}"
              class="edit-button top-right-button-member glyphicon glyphicon-pencil"
              rel="tooltip" title="Edit Catalog"></a>
-          <a href="/deletecatalog/{{catalog.key.id()}}"
+          <a href="" onclick="deleteCatalog({{catalog.key.id()}})"
              class="delete-button top-right-button-member"
              rel="tooltip" title="Delete Catalog">X</a>
         </div>

@@ -83,5 +83,5 @@ def delete_catalog_handler(catalog_id):
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d!' % catalog_id)
     models.delete_catalog(catalog_id)
-    models.wait_for(catalog_entity)
+
     return flask.redirect('/')

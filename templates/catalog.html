@@ -10,9 +10,9 @@
       <a href="/editcatalog/{{catalog.key.id()}}"
          class="edit-button top-right-button-member glyphicon glyphicon-pencil"
          rel="tooltip" title="Edit Catalog"></a>
-      <a href="/deletecatalog/{{catalog.key.id()}}"
+      <span onclick="deleteCatalog({{catalog.key.id()}})"
          class="delete-button top-right-button-member"
-         rel="tooltip" title="Delete Catalog">X</a>
+         rel="tooltip" title="Delete Catalog">X</span>
     </div>
   </div>
   <img class="cover-picture" src="{{catalog.cover_picture}}">

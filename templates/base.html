@@ -1,43 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Item Catalog</title>
+    <title>CatalogWorld - {% if catalog %}{{catalog.name}}{% endif %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Righteous|Oswald" rel="stylesheet">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://apis.google.com/js/platform.js?onload=start"></script>
-    <script src="/js/main.js"></script>
+    <script src="https://https;//code.jquery.com/ui/1.12.1/jquery-ui.js" async defer></script>
+    <meta name="google-signin-client_id" content="1050453128023-lpuo4af45992ivtcf80jqq4gpghka0l0.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    <script src="/js/main.js" async defer></script>
   </head>
   <body>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashes">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
 
-    <header>
-      <div class="login">
+    <div id="top-bar">
+      <a href="/" id="page-name" class="col-md-2 white-link">CatalogWorld</a>
+      <div id="login" class="pull-right">
         {% if username %}
           <span class="welcome">Hello, {{username}}!</span>
-          <span class="logout"><a href="/logout">logout</a></span>
+          <a href="javascript:googleLogout()" class="login btn btn-default btn-xs">logout</a>
         {% else %}
-          <a href="/login">login</a>
+          <a href="/login" class="login btn btn-default btn-xs">login</a>
         {% endif %}
       </div>
-      <h1><a href="/">Item Catalog</a></h1>
-      <p class="tagline">Find great stuff</p>
-      <hr>
-    </header>
-    <div id="result"></div>
+    </div>
+    <header id="header">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
 
     {% block content %}{% endblock %}
-    <span id="state">{{state}}</span>
+
   </body>
+
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/stylesheets/main.css">
 </html>

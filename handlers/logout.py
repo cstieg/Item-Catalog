@@ -1,9 +1,10 @@
+import logging
 import flask
 import gconnect
 from werkzeug.exceptions import BadRequest
 from itemcatalog import app
 
-@app.route('/logout', methods=['GET'])
+@app.route('/logout', methods=['POST'])
 def logout_handler():
     username = flask.session.get('username')
     if not username:

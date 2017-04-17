@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>{{catalog.name}}</h2>
+
+
+  <h1>{{catalog.name}}</h1>
   <p>
     {{catalog.description}}
   </p>
-  <img src="{{catalog.cover_picture}}">
-
+  <img class="cover_picture" src="{{catalog.cover_picture}}">
+</header>
+<main id="main">
   {% if categories %}
     {% for category in categories if categories %}
       <div class="category">
@@ -17,7 +20,7 @@
           <h4>{{item.name}}</h4>
           <p>{{item.description}}</p>
           <p>Price: {{item.price}}</p>
-          <img href="{{item.picture}}">
+          <img class="item_picture" href="{{item.picture}}">
           <p id="edititem">
             <a href="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}">Edit item</a>
           </p>
@@ -42,5 +45,5 @@
   <p id="additem">
     <a href="/catalog/{{catalog.key.id()}}/additem">Add Item</a>
   </p>
-
+</main>
 {% endblock content %}

@@ -1,76 +1,74 @@
+gapi.load('auth2', function() {
+  auth2 = gapi.auth2.init({
+    client_id: '1050453128023-lpuo4af45992ivtcf80jqq4gpghka0l0.apps.googleusercontent.com',
+    // Scopes to request in addition to 'profile' and 'email'
+    //scope: 'additional_scope'
+  });
+});
+
+$('#gsignin').click(function() {
+  // signInCallback defined in step 6.
+  auth2.grantOfflineAccess().then(signInCallback);
+});
+
+// (function renderButton() {
+//   gapi.signin2.render('gsignin', {
+//     'scope': 'profile email',
+//     'width': 240,
+//     'height': 50,
+//     'longtitle': true,
+//     'theme': 'dark',
+//     'onsuccess': signInCallback});
+// })();
+
+
 function signInCallback(authResult) {
   if (authResult['code']) {
     // Hide the sign-in button now that the user is authorized
-    $('#signinButton').attr('style', 'display: none');
-    state = $('#state')[0].innerText;
+    $('#gsignin').attr('style', 'display: none');
     // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
     $.ajax({
       type: 'POST',
       url: '/gconnect',
+      // Always include an `X-Requested-With` header in every AJAX request,
+      // to protect against CSRF attacks.
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
       processData: false,
       data: authResult['code'],
       contentType: 'application/octet-stream; charset=utf-8',
       success: function(result) {
         // Handle or verify the server response if necessary.
-        $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...');
-        setTimeout(function() {
-          window.location.href = '/';
-        }, 4000);
+        alert('Succesfully logged in!');
+        window.location.href = '/';
       },
       error: function(result) {
-        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+        alert('Failed to make a server-side call. Check your configuration and console.');
       }
     });
   }
 }
 
-
-    /*
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '1755153644812694',
-        cookie     : true,  // enable cookies to allow the server to access
-        // the session
-        xfbml      : true,  // parse social plugins on this page
-        version    : 'v2.2' // use version 2.2
-      });
-    };
-    // Load the SDK asynchronously
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    // Here we run a very simple test of the Graph API after login is
-    // successful.  See statusChangeCallback() for when this call is made.
-    function sendTokenToServer() {
-      var access_token = FB.getAuthResponse()['accessToken'];
-      console.log(access_token)
-      console.log('Welcome!  Fetching your information.... ');
-      FB.api('/me', function(response) {
-        console.log('Successful login for: ' + response.name);
-        $.ajax({
-          type: 'POST',
-          url: '/fbconnect?state={{STATE}}',
-          processData: false,
-          data: access_token,
-          contentType: 'application/octet-stream; charset=utf-8',
-          success: function(result) {
-            // Handle or verify the server response if necessary.
-            if (result) {
-              $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-              setTimeout(function() {
-                window.location.href = "/restaurant";
-              }, 4000);
-
-            } else {
-              $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-            }
-          }
-
-        });
-      });
+function googleLogout() {
+  $.ajax({
+    type: 'POST',
+    url: '/logout',
+    // Always include an `X-Requested-With` header in every AJAX request,
+    // to protect against CSRF attacks.
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    processData: false,
+    contentType: 'application/octet-stream; charset=utf-8',
+    success: function(result) {
+      // Handle or verify the server response if necessary.
+      auth2.disconnect();
+      alert('Succesfully logged out!');
+      window.location.href = '/';
+    },
+    error: function(result) {
+      alert('Failed to make a server-side call. Check your configuration and console.');
     }
-*/
+  });
+}

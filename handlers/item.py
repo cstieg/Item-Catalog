@@ -9,8 +9,8 @@ import uploadfile
 from itemcatalog import app
 
 
-@login.check_logged_in
 @app.route('/catalog/<catalog_id>/additem', methods=['GET', 'POST'])
+@login.check_logged_in
 def add_item_handler(catalog_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)
@@ -57,8 +57,8 @@ def add_item_handler(catalog_id):
         models.wait_for(new_item)
         return flask.redirect('/catalog/%d' % catalog_entity.key.id())
 
-@login.check_logged_in
 @app.route('/catalog/<catalog_id>/edititem/<item_id>', methods=['GET', 'POST'])
+@login.check_logged_in
 def edit_item_handler(catalog_id, item_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)
@@ -105,8 +105,8 @@ def edit_item_handler(catalog_id, item_id):
         models.wait_for(item_entity)
         return flask.redirect('/catalog/%d' % catalog_entity.key.id())
 
-@login.check_logged_in
 @app.route('/catalog/<catalog_id>/deleteitem/<item_id>', methods=['POST'])
+@login.check_logged_in
 def delete_item_handler(catalog_id, item_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)

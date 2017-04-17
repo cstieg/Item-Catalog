@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Main Page</h2>
-
+  <h1>CatalogWorld</h1>
+  <br>
   {% for catalog in catalogs %}
     <article class="catalog">
       <a href="/catalog/{{catalog.key.id()}}">

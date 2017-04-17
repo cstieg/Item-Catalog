@@ -14,11 +14,15 @@ def login_handler():
     return flask.render_template('login.html')
 
 def get_current_user():
+    logging.info(flask.session.get('email'))
     return user_login.find_user_by_email(flask.session.get('email'))
 
 def check_logged_in(func):
+    logging.info(func)
     @wraps(func)
     def wrapper(*args, **kwargs):
+        logging.info(args)
+        logging.info(flask.session.get('username'))
         if 'username' in flask.session:
             return func(*args, **kwargs)
         else:

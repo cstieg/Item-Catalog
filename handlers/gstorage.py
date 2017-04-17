@@ -46,9 +46,13 @@ def upload_file(file_stream, filename, content_type):
     bucket = client.bucket(GCLOUD_STORAGE_BUCKET)
     blob = bucket.blob(filename)
 
+
+
     blob.upload_from_string(
         file_stream,
         content_type=content_type)
+
+    blob.make_public()
 
     url = blob.public_url
 

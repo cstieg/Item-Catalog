@@ -23,8 +23,9 @@ def catalog_view_handler(catalog_id):
     categories = models.get_categories(catalog_id)
     return flask.render_template('catalog.html', username=username, catalog=catalog, categories=categories)
 
-@login.check_logged_in
+
 @app.route('/addcatalog', methods=['GET', 'POST'])
+@login.check_logged_in
 def add_catalog_handler():
     username = flask.session.get('username')
 
@@ -33,6 +34,8 @@ def add_catalog_handler():
 
     elif flask.request.method == 'POST':
         try:
+            cover_picture = flask.request.files.get('cover_picture')
+
             cover_picture_obj = flask.request.files.get('cover_picture')
             cover_picture_url = uploadfile.save_file(cover_picture_obj)
             owner = login.get_current_user()
@@ -47,8 +50,8 @@ def add_catalog_handler():
         except IOError:
             return ('Failed to add new catalog', 401)
 
-@login.check_logged_in
 @app.route('/editcatalog/<catalog_id>', methods=['GET', 'POST'])
+@login.check_logged_in
 def edit_catalog_handler(catalog_id):
     catalog_id = int(catalog_id)
     catalog_entity = models.get_catalog_by_id(catalog_id)
@@ -74,8 +77,8 @@ def edit_catalog_handler(catalog_id):
         except IOError:
             return ('Failed to edit catalog', 401)
 
-@login.check_logged_in
 @app.route('/deletecatalog/<catalog_id>', methods=['POST'])
+@login.check_logged_in
 def delete_catalog_handler(catalog_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)

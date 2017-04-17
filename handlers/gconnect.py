@@ -11,6 +11,7 @@ from itemcatalog import app
 
 @app.route('/gconnect', methods=['POST'])
 def google_login_handler():
+
     code = flask.request.data
     try:
         credentials = get_google_credentials(code)

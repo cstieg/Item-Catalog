@@ -6,8 +6,8 @@ import models
 import login
 from itemcatalog import app
 
-@login.check_logged_in
 @app.route('/catalog/<catalog_id>/addcategory', methods=['GET', 'POST'])
+@login.check_logged_in
 def add_category_handler(catalog_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)
@@ -26,8 +26,8 @@ def add_category_handler(catalog_id):
         models.wait_for(new_category)
         return flask.redirect('/catalog/%d' % catalog_entity.key.id())
 
-@login.check_logged_in
 @app.route('/catalog/<catalog_id>/editcategory/<category_id>', methods=['GET', 'POST'])
+@login.check_logged_in
 def edit_category_handler(catalog_id, category_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)
@@ -50,8 +50,8 @@ def edit_category_handler(catalog_id, category_id):
         models.wait_for(category_entity)
         return flask.redirect('/catalog/%d' % catalog_entity.key.id())
 
-@login.check_logged_in
 @app.route('/catalog/<catalog_id>/deletecategory/<category_id>', methods=['POST'])
+@login.check_logged_in
 def delete_category_handler(catalog_id, category_id):
     username = flask.session.get('username')
     catalog_id = int(catalog_id)

@@ -19,8 +19,12 @@
         </a>
         <p>{{catalog.description}}</p>
         <div class="top-right-button-group">
-          <a href="" class="edit-button top-right-button-member glyphicon glyphicon-pencil" rel="tooltip" title="Edit Catalog"></a>
-          <a href="" class="delete-button top-right-button-member" rel="tooltip" title="Delete Catalog">X</a>
+          <a href="/editcatalog/{{catalog.key.id()}}"
+             class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+             rel="tooltip" title="Edit Catalog"></a>
+          <a href="/deletecatalog/{{catalog.key.id()}}"
+             class="delete-button top-right-button-member"
+             rel="tooltip" title="Delete Catalog">X</a>
         </div>
       </div>
 

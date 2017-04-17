@@ -1,45 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
-  <h1>{{catalog.name}}</h1>
-  <p>
-    {{catalog.description}}
-  </p>
+  <div class="catalog-label">
+    <h1>{{catalog.name}}</h1>
+    <p>
+      {{catalog.description}}
+    </p>
+    <div class="top-right-button-group">
+      <a href="/editcatalog/{{catalog.key.id()}}"
+         class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+         rel="tooltip" title="Edit Catalog"></a>
+      <a href="/deletecatalog/{{catalog.key.id()}}"
+         class="delete-button top-right-button-member"
+         rel="tooltip" title="Delete Catalog">X</a>
+    </div>
+  </div>
   <img class="cover-picture" src="{{catalog.cover_picture}}">
+
 </header>
 <main class="container">
   {% if categories %}
     {% for category in categories if categories %}
       <div class="category row">
-        <h2>{{category.name}}</h2>
-        <p>{{category.description}}</p>
+        <div class="category-label">
+          <h2>{{category.name}}</h2>
+          <p>{{category.description}}</p>
+          <div class="top-right-button-group">
+            <a href="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
+               class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+               rel="tooltip" title="Edit Category"></a>
+            <a href="/catalog/{{catalog.key.id()}}/deletecategory/{{category.key.id()}}"
+               class="delete-button top-right-button-member"
+               rel="tooltip" title="Delete Category">X</a>
+          </div>
+        </div>
+
 
         {% for item in category.get_items() %}
           <article class="item col-md-4 col-sm-6 col-xs-12">
             <img class="item-picture" src="{{item.picture}}">
-            <h3>{{item.name}}</h3>
-            <p>{{item.description}}</p>
-            <p>Price: {{item.price}}</p>
-            <p id="edititem">
-              <a href="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}">Edit item</a>
-            </p>
+            <div class="item-label">
+              <h3>{{item.name}}</h3>
+              <p>{{item.description}}</p>
+              <p>Price: {{item.price}}</p>
+              <div class="top-right-button-group">
+                <a href="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}"
+                   class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+                   rel="tooltip" title="Edit Item"></a>
+                <a href="/catalog/{{catalog.key.id()}}/deleteitem/{{item.key.id()}}"
+                   class="delete-button top-right-button-member"
+                   rel="tooltip" title="Delete Item">X</a>
+              </div>
+            </div>
           </article>
         {% endfor %}
-
-        <p class="row">
-          <hr>
-          <a href="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}">Edit category</a>
-        </p>
 
       </div>
     {% endfor %}
   {% endif %}
-
-  <p id="editcatalog">
-    <a href="/editcatalog/{{catalog.key.id()}}">Edit Catalog</a>
-  </p>
 
   <p id="addcategory">
     <a href="/catalog/{{catalog.key.id()}}/addcategory">Add Category</a>

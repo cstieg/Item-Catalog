@@ -34,12 +34,20 @@ main {
 
 .cover_picture {
   max-width: 1000px;
-  max-height: 500px;
+  max-height: 300px;
   width: auto;
   height: auto;
   margin: 0 auto;
 }
 
+.catalog {
+  text-align: center;
+}
+
+.catalog_picture {
+  width: 100%;
+  height: auto;
+}
 
 
 /*Google Signin Button Style*/

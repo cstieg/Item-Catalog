@@ -2,19 +2,27 @@
 
 {% block content %}
   <h1>CatalogWorld</h1>
-  <br>
+  <h2>Browse catalogs</h2>
+</header>
+<main class="container">
+  <div id="catalog-list" class="row">
+
+  </div>
   {% for catalog in catalogs %}
-    <article class="catalog">
+    <article class="catalog col-md-4 col-sm-6 col-xs-12">
       <a href="/catalog/{{catalog.key.id()}}">
-        <img src="{{catalog.cover_picture}}">
+        <img class="catalog_picture" src="{{catalog.cover_picture}}">
         <h3>{{catalog.name}}</h3>
       </a>
-      <h4>{{catalog.description}}</h4>
+      <p>{{catalog.description}}</p>
     </article>
   {% endfor %}
 
-  <p id="addcatalog">
+
+  <p id="addcatalog" class="row">
+    <hr>
     <a href="/addcatalog">Add Catalog</a>
   </p>
+</main>
 
 {% endblock content %}

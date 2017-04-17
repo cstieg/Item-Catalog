@@ -1,3 +1,4 @@
+
 gapi.load('auth2', function() {
   auth2 = gapi.auth2.init({
     client_id: '1050453128023-lpuo4af45992ivtcf80jqq4gpghka0l0.apps.googleusercontent.com',
@@ -10,17 +11,6 @@ $('#gsignin').click(function() {
   // signInCallback defined in step 6.
   auth2.grantOfflineAccess().then(signInCallback);
 });
-
-// (function renderButton() {
-//   gapi.signin2.render('gsignin', {
-//     'scope': 'profile email',
-//     'width': 240,
-//     'height': 50,
-//     'longtitle': true,
-//     'theme': 'dark',
-//     'onsuccess': signInCallback});
-// })();
-
 
 function signInCallback(authResult) {
   if (authResult['code']) {
@@ -72,3 +62,9 @@ function googleLogout() {
     }
   });
 }
+
+
+$(window).resize(function() {
+  $('.catalog_picture').height($('.catalog_picture').width());
+});
+$(window).resize();

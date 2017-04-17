@@ -12,9 +12,18 @@
     <article class="catalog col-md-4 col-sm-6 col-xs-12">
       <a href="/catalog/{{catalog.key.id()}}">
         <img class="catalog-picture" src="{{catalog.cover_picture}}">
-        <h3>{{catalog.name}}</h3>
       </a>
-      <p>{{catalog.description}}</p>
+      <div class="catalog-label">
+        <a href="/catalog/{{catalog.key.id()}}">
+          <h3>{{catalog.name}}</h3>
+        </a>
+        <p>{{catalog.description}}</p>
+        <div class="top-right-button-group">
+          <a href="" class="edit-button top-right-button-member glyphicon glyphicon-pencil" rel="tooltip" title="Edit Catalog"></a>
+          <a href="" class="delete-button top-right-button-member" rel="tooltip" title="Delete Catalog">X</a>
+        </div>
+      </div>
+
     </article>
   {% endfor %}
 

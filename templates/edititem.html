@@ -2,7 +2,7 @@
 
 {% block content %}
   {% block heading %}
-  <h2>Edit item{{item.name}} in {{catalog.name}}</h2>
+  <h2>Edit item {{item.name}} in {{catalog.name}}</h2>
 
   <form id="edit-item" class="item-form" method="post"
       action="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}"

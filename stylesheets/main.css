@@ -28,11 +28,7 @@ main {
   margin: auto auto auto 0px;
 }
 
-.login {
-}
-
-
-.cover_picture {
+.cover-picture {
   max-width: 1000px;
   max-height: 300px;
   width: auto;
@@ -45,7 +41,8 @@ main {
   text-align: center;
 }
 
-.catalog_picture {
+.catalog-picture,
+.item-picture {
   width: 100%;
   height: auto;
 }

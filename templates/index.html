@@ -11,7 +11,7 @@
   {% for catalog in catalogs %}
     <article class="catalog col-md-4 col-sm-6 col-xs-12">
       <a href="/catalog/{{catalog.key.id()}}">
-        <img class="catalog_picture" src="{{catalog.cover_picture}}">
+        <img class="catalog-picture" src="{{catalog.cover_picture}}">
         <h3>{{catalog.name}}</h3>
       </a>
       <p>{{catalog.description}}</p>

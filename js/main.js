@@ -65,6 +65,7 @@ function googleLogout() {
 
 
 $(window).resize(function() {
-  $('.catalog_picture').height($('.catalog_picture').width());
+  $('.catalog-picture').height($('.catalog-picture').width());
+  $('.item-picture').height($('.item-picture').width());
 });
 $(window).resize();

@@ -34,8 +34,6 @@ def add_catalog_handler():
 
     elif flask.request.method == 'POST':
         try:
-            cover_picture = flask.request.files.get('cover_picture')
-
             cover_picture_obj = flask.request.files.get('cover_picture')
             cover_picture_url = uploadfile.save_file(cover_picture_obj)
             owner = login.get_current_user()
@@ -64,7 +62,6 @@ def edit_catalog_handler(catalog_id):
 
     elif flask.request.method == 'POST':
         try:
-
             cover_picture_obj = flask.request.files.get('cover_picture')
             # TODO: delete old picture
             catalog_entity.cover_picture = uploadfile.save_file(cover_picture_obj)

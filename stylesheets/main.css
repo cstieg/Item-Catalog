@@ -2,7 +2,7 @@ html {
   min-width: 230px;
 }
 
-#header,
+header,
 main {
   max-width: 1200px;
   margin: auto;
@@ -40,13 +40,18 @@ main {
   margin: 0 auto;
 }
 
-.catalog {
+.catalog,
+.item {
   text-align: center;
 }
 
 .catalog_picture {
   width: 100%;
   height: auto;
+}
+
+.category {
+  text-align: center;
 }
 
 

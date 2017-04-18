@@ -1,6 +1,6 @@
 import logging
 from google.appengine.ext import ndb
-from user_login import User
+from user_login import User, check_user_owns
 import catalog
 import category
 
@@ -71,6 +71,7 @@ def delete_item(catalog_id, item_id):
     if not item_entity:
         raise ValueError('Item not found!')
 
+    check_user_owns(item_entity)
     item_entity.key.delete()
 
     # TODO: delete related data

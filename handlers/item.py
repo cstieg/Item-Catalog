@@ -18,6 +18,8 @@ def add_item_handler(catalog_id):
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
 
+    models.check_user_owns(catalog_entity)
+
     if flask.request.method == 'GET':
         category_id = flask.request.args.get('category_id')
         if category_id:
@@ -70,6 +72,8 @@ def edit_item_handler(catalog_id, item_id):
     item_entity = models.get_item_by_id(catalog_id, item_id)
     if not (item_entity):
         raise BadRequest('Could not find item with id %d!' % item_id)
+
+    models.check_user_owns(item_entity)
 
     if flask.request.method == 'GET':
         categories = models.get_categories(catalog_id)

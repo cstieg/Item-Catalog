@@ -1,6 +1,6 @@
 import logging
 from google.appengine.ext import ndb
-from user_login import User
+from user_login import User, check_user_owns
 
 class Catalog(ndb.Model):
     name = ndb.StringProperty(required=True, indexed=True)
@@ -24,6 +24,7 @@ def get_catalogs():
 
 def delete_catalog(catalog_id):
     catalog_entity = get_catalog_by_id(catalog_id)
+    check_user_owns(catalog_entity)
     if not catalog_entity:
         raise ValueError('Catalog not found!')
     catalog_entity.key.delete()

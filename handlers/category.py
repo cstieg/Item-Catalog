@@ -15,6 +15,8 @@ def add_category_handler(catalog_id):
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
 
+    models.check_user_owns(catalog_entity)
+
     if flask.request.method == 'GET':
         return flask.render_template('addcategory.html', username=username, catalog=catalog_entity, category=None)
 
@@ -34,6 +36,8 @@ def edit_category_handler(catalog_id, category_id):
     catalog_entity = models.get_catalog_by_id(catalog_id)
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
+
+    models.check_user_owns(catalog_entity)
 
     category_id = int(category_id)
     category_entity = models.get_category_by_id(catalog_id, category_id)

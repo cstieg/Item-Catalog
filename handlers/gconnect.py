@@ -28,7 +28,6 @@ def google_login_handler():
     flask.session['picture'] = data['picture']
     flask.session['email'] = data['email']
 
-    logging.info(data['email'])
     # Create user if not in database
     new_user = user_login.create_user(data['email'], data['name'], 'google', data['picture'])
     if not new_user:
@@ -56,15 +55,3 @@ def get_google_user_info(access_token):
         raise HTTPException('Cannot access user information from Google!', response)
 
     return json.loads(response.content)
-
-def disconnect_google_user():
-    access_token = flask.session.get('access_token')
-    response = urlfetch.fetch(
-        url='https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token,
-        method=urlfetch.GET)
-    logging.info(response.status_code)
-
-    if response.status_code >= 400:
-        raise BadRequest('Failed to revoke token for user')
-
-

@@ -1,8 +1,7 @@
 import logging
 from google.appengine.ext import ndb
-import catalog
 import item
-from user_login import check_user_owns
+import catalog
 
 class Category(ndb.Model):
     name = ndb.StringProperty(required=True, indexed=True)
@@ -21,7 +20,7 @@ def get_category_by_id(catalog_id, category_id):
         raise ValueError('catalog_id is required!')
     if not category_id:
         return None
-    catalog_entity = catalog.Catalog.get_by_id(catalog_id)
+    catalog_entity = catalog.get_catalog_by_id(catalog_id)
     if not catalog_entity:
         logging.error('Catalog not found!')
         return None
@@ -47,9 +46,9 @@ def delete_category(catalog_id, category_id):
     category_entity = get_category_by_id(catalog_id, category_id)
     if not category_entity:
         raise ValueError('Category not found!')
+
     catalog_entity = catalog.get_catalog_by_id(catalog_id)
-    check_user_owns(catalog_entity)
 
+    for item_entity in item.get_items(catalog_entity.key.id(), category_entity.key.id()):
+        item_entity.key.delete()
     category_entity.key.delete()
-
-    # TODO: delete related data

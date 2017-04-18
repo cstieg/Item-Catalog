@@ -1,6 +1,5 @@
 import flask
 from google.appengine.ext import ndb
-from werkzeug.exceptions import Unauthorized
 
 # TODO: Add validators for entity fields
 
@@ -36,12 +35,5 @@ def create_user(email, name, provider, picture):
                     picture=picture)
         return new_user.put()
 
-
-def user_owns(entity):
-    return flask.session.get('username') == entity.owner.get().username
-
-def check_user_owns(entity):
-    if user_owns(entity):
-        return
-    else:
-        raise Unauthorized
+def get_current_user():
+    return find_user_by_email(flask.session.get('email'))

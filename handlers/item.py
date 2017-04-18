@@ -12,13 +12,14 @@ from itemcatalog import app
 @app.route('/catalog/<catalog_id>/additem', methods=['GET', 'POST'])
 @login.check_logged_in
 def add_item_handler(catalog_id):
-    username = flask.session.get('username')
+    user = models.get_current_user()
     catalog_id = int(catalog_id)
     catalog_entity = models.get_catalog_by_id(catalog_id)
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
 
-    models.check_user_owns(catalog_entity)
+    if not catalog_entity.user_can_edit(user):
+        raise Unauthorized
 
     if flask.request.method == 'GET':
         category_id = flask.request.args.get('category_id')
@@ -27,7 +28,7 @@ def add_item_handler(catalog_id):
 
         categories = models.get_categories(catalog_id)
         return flask.render_template('additem.html',
-                                     username=username,
+                                     user=user,
                                      catalog=catalog_entity,
                                      category_id=category_id,
                                      categories=categories,
@@ -36,7 +37,6 @@ def add_item_handler(catalog_id):
     elif flask.request.method == 'POST':
         picture_obj = flask.request.files.get('picture')
         picture_url = uploadfile.save_file(picture_obj)
-        owner = login.get_current_user()
         try:
             price = float(flask.request.form.get('price'))
         except:
@@ -46,7 +46,7 @@ def add_item_handler(catalog_id):
                                description=flask.request.form.get('description'),
                                price=price,
                                picture=picture_url,
-                               owner=owner.key,
+                               owner=user.key,
                                catalog=catalog_entity.key)
         category_id = flask.request.form.get('category_id')
         if category_id:
@@ -62,7 +62,7 @@ def add_item_handler(catalog_id):
 @app.route('/catalog/<catalog_id>/edititem/<item_id>', methods=['GET', 'POST'])
 @login.check_logged_in
 def edit_item_handler(catalog_id, item_id):
-    username = flask.session.get('username')
+    user = models.get_current_user()
     catalog_id = int(catalog_id)
     catalog_entity = models.Catalog.get_by_id(catalog_id)
     if not catalog_entity:
@@ -73,12 +73,13 @@ def edit_item_handler(catalog_id, item_id):
     if not (item_entity):
         raise BadRequest('Could not find item with id %d!' % item_id)
 
-    models.check_user_owns(item_entity)
+    if not catalog_entity.user_can_edit(user):
+        raise Unauthorized
 
     if flask.request.method == 'GET':
         categories = models.get_categories(catalog_id)
         return flask.render_template('edititem.html',
-                                     username=username,
+                                     user=user,
                                      catalog=catalog_entity,
                                      categories=categories,
                                      category_id=item_entity.category.id(),
@@ -112,7 +113,6 @@ def edit_item_handler(catalog_id, item_id):
 @app.route('/catalog/<catalog_id>/deleteitem/<item_id>', methods=['POST'])
 @login.check_logged_in
 def delete_item_handler(catalog_id, item_id):
-    username = flask.session.get('username')
     catalog_id = int(catalog_id)
     catalog_entity = models.get_catalog_by_id(catalog_id)
     if not catalog_entity:
@@ -122,6 +122,9 @@ def delete_item_handler(catalog_id, item_id):
     item_entity = models.get_item_by_id(catalog_id, item_id)
     if not (item_entity):
         raise BadRequest('Could not find item with id %d!' % item_id)
+
+    if not catalog_entity.user_can_edit(models.get_current_user()):
+        raise Unauthorized
 
     models.delete_item(catalog_id, item_id)
     return flask.redirect('/catalog/%d' % catalog_entity.key.id())

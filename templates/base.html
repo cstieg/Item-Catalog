@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>CatalogWorld - {% if catalog %}{{catalog.name}}{% endif %}</title>
+    <title>CatalogWorld {% if catalog %} - {{catalog.name}}{% endif %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://https;//code.jquery.com/ui/1.12.1/jquery-ui.js" async defer></script>
     <meta name="google-signin-client_id" content="1050453128023-lpuo4af45992ivtcf80jqq4gpghka0l0.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
     <script src="/js/main.js" defer></script>
@@ -15,8 +14,8 @@
     <div id="top-bar">
       <a href="/" id="page-name" class="col-md-2 white-link">CatalogWorld</a>
       <div id="login" class="pull-right">
-        {% if username %}
-          <span class="welcome">Hello, {{username}}!</span>
+        {% if user %}
+          <span class="welcome">Hello, {{user.full_name}}!</span>
           <a href="javascript:googleLogout()" class="login btn btn-default btn-xs">logout</a>
         {% else %}
           <a href="/login" class="login btn btn-default btn-xs">login</a>
@@ -35,6 +34,27 @@
       {% endwith %}
 
     {% block content %}{% endblock %}
+
+
+    <div id="delete-dialog" class="modal fade" role="dialog" title="Delete?">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Confirm Delete</h4>
+          </div>
+          <div class="modal-body">
+            <p class="message">
+                Delete this item?  This action cannot be reversed.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button name="delete" onclick="">Delete</button>
+            <button name="cancel" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
 

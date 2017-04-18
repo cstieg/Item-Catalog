@@ -21,7 +21,8 @@
       <button name="cancel" class="bottom-button" onclick="window.history.back()">Cancel</button>
       <input name="submit" type="submit" class="bottom-button">
       {% block delete %}
-        <button name="delete" class="bottom-button" onclick="deleteCategory(catalog.key.id(), category.key.id())">Delete Category</button>
+        <button name="delete" class="bottom-button" data-toggle="modal" data-target="#delete-dialog"
+          onclick="setDialogCallback('deleteCategory({{catalog.key.id()}}, {{category.key.id()}})')">Delete Category</button>
       {% endblock delete %}
     </div>
   </form>

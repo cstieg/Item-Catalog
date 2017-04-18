@@ -6,14 +6,17 @@
     <p>
       {{catalog.description}}
     </p>
-    <div class="top-right-button-group">
-      <a href="/editcatalog/{{catalog.key.id()}}"
-         class="edit-button top-right-button-member glyphicon glyphicon-pencil"
-         rel="tooltip" title="Edit Catalog"></a>
-      <span onclick="deleteCatalog({{catalog.key.id()}})"
-         class="delete-button top-right-button-member"
-         rel="tooltip" title="Delete Catalog">X</span>
-    </div>
+    {% if catalog.user_can_edit(user) %}
+      <div class="top-right-button-group">
+        <a href="/editcatalog/{{catalog.key.id()}}"
+           class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+           rel="tooltip" title="Edit Catalog"></a>
+        <a data-toggle="modal" data-target="#delete-dialog"
+           onclick="setDialogCallback('deleteCatalog({{catalog.key.id()}})')"
+           class="delete-button top-right-button-member"
+           rel="tooltip" title="Delete Catalog">X</a>
+      </div>
+    {% endif %}
   </div>
   <img class="cover-picture" src="{{catalog.cover_picture}}">
 
@@ -25,14 +28,17 @@
         <div class="category-label">
           <h2>{{category.name}}</h2>
           <p>{{category.description}}</p>
-          <div class="top-right-button-group">
-            <a href="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
-               class="edit-button top-right-button-member glyphicon glyphicon-pencil"
-               rel="tooltip" title="Edit Category"></a>
-            <a href="/catalog/{{catalog.key.id()}}/deletecategory/{{category.key.id()}}"
-               class="delete-button top-right-button-member"
-               rel="tooltip" title="Delete Category">X</a>
-          </div>
+          {% if catalog.user_can_edit(user) %}
+            <div class="top-right-button-group">
+              <a href="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
+                 class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+                 rel="tooltip" title="Edit Category"></a>
+              <a data-toggle="modal" data-target="#delete-dialog"
+                 onclick="setDialogCallback('deleteCategory({{catalog.key.id()}}, {{category.key.id()}})')"
+                 class="delete-button top-right-button-member"
+                 rel="tooltip" title="Delete Category">X</a>
+            </div>
+          {% endif %}
         </div>
 
 
@@ -42,15 +48,18 @@
             <div class="item-label">
               <h3>{{item.name}}</h3>
               <p>{{item.description}}</p>
-              <p>Price: {{item.price}}</p>
-              <div class="top-right-button-group">
-                <a href="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}"
-                   class="edit-button top-right-button-member glyphicon glyphicon-pencil"
-                   rel="tooltip" title="Edit Item"></a>
-                <a href="/catalog/{{catalog.key.id()}}/deleteitem/{{item.key.id()}}"
-                   class="delete-button top-right-button-member"
+              <p>Price: {{'%0.2f' % item.price}}</p>
+              {% if catalog.user_can_edit(user) %}
+                  <div class="top-right-button-group">
+                    <a href="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}"
+                       class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+                       rel="tooltip" title="Edit Item"></a>
+                    <a data-toggle="modal" data-target="#delete-dialog"
+                       onclick="setDialogCallback('deleteItem({{catalog.key.id()}}, {{item.key.id()}})')"
+                       class="delete-button top-right-button-member"
                    rel="tooltip" title="Delete Item">X</a>
-              </div>
+                 </div>
+              {% endif %}
             </div>
           </article>
         {% endfor %}

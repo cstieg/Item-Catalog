@@ -18,14 +18,17 @@
           <h3>{{catalog.name}}</h3>
         </a>
         <p>{{catalog.description}}</p>
-        <div class="top-right-button-group">
-          <a href="/editcatalog/{{catalog.key.id()}}"
-             class="edit-button top-right-button-member glyphicon glyphicon-pencil"
-             rel="tooltip" title="Edit Catalog"></a>
-          <a href="" onclick="deleteCatalog({{catalog.key.id()}})"
-             class="delete-button top-right-button-member"
-             rel="tooltip" title="Delete Catalog">X</a>
-        </div>
+        {% if catalog.user_can_edit(user) %}
+          <div class="top-right-button-group">
+            <a href="/editcatalog/{{catalog.key.id()}}"
+               class="edit-button top-right-button-member glyphicon glyphicon-pencil"
+               rel="tooltip" title="Edit Catalog"></a>
+            <a data-toggle="modal" data-target="#delete-dialog"
+               onclick="setDialogCallback('deleteCatalog({{catalog.key.id()}})')"
+               class="delete-button top-right-button-member"
+               rel="tooltip" title="Delete Catalog">X</a>
+          </div>
+        {% endif %}
       </div>
 
     </article>

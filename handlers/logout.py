@@ -1,21 +1,16 @@
 import logging
 import flask
 import gconnect
+import models
 from werkzeug.exceptions import BadRequest
 from itemcatalog import app
 
 @app.route('/logout', methods=['POST'])
 def logout_handler():
-    username = flask.session.get('username')
-    if not username:
+    user = models.get_current_user()
+    if not user:
         logging.info('Already logged out!')
         return flask.redirect(flask.url_for('main_page_handler'))
-
-    if flask.session.get('provider') == 'google':
-        try:
-            gconnect.disconnect_google_user()
-        except BadRequest:
-            flask.flash('Failed to revoke Google tokens for user!')
 
     # Reset the user's session.
     flask.session.clear()

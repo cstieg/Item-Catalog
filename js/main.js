@@ -30,7 +30,7 @@ function signInCallback(authResult) {
       contentType: 'application/octet-stream; charset=utf-8',
       success: function(result) {
         // Handle or verify the server response if necessary.
-        alert('Succesfully logged in!');
+        //alert('Succesfully logged in!');
         window.location.href = '/';
       },
       error: function(result) {
@@ -63,27 +63,45 @@ function googleLogout() {
   });
 }
 
+function setDialogCallback(callbackText) {
+  $('#delete-dialog button[name=delete]').attr('onclick', callbackText);
+}
+
+function deleteFailure() {
+  alert('You are not the owner of this item and do not have authorization to delete!');
+}
+
+function closeDeleteDialog() {
+  $('#delete-dialog').modal('hide');
+}
 
 function deleteCatalog(catalogID) {
   $.ajax({
     type: 'POST',
-    url: '/deletecatalog/' + catalogID
+    url: '/deletecatalog/' + catalogID,
+    success: closeDeleteDialog,
+    error: deleteFailure
   });
 }
 
 function deleteCategory(catalogID, categoryID) {
   $.ajax({
     type: 'POST',
-    url: '/catalog/' + catalogID + "/deletecategory/" + categoryID
+    url: '/catalog/' + catalogID + "/deletecategory/" + categoryID,
+    success: closeDeleteDialog,
+    error: deleteFailure
   });
 }
 
 function deleteItem(catalogID, itemID) {
   $.ajax({
     type: 'POST',
-    url: '/catalog/' + catalogID + "/deleteitem/" + itemID
+    url: '/catalog/' + catalogID + "/deleteitem/" + itemID,
+    success: closeDeleteDialog,
+    error: deleteFailure
   });
 }
+
 
 
 $(window).resize(function() {

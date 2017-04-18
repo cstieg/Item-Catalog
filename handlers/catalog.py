@@ -1,6 +1,6 @@
 import logging
 import flask
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, Unauthorized
 
 import models
 import login
@@ -9,39 +9,38 @@ from itemcatalog import app
 
 @app.route('/', methods=['GET'])
 def main_page_handler():
-    username = flask.session.get('username')
+    user = models.get_current_user()
     catalogs = models.get_catalogs()
-    return flask.render_template('index.html', username=username, catalogs=catalogs)
+    return flask.render_template('index.html', user=user, catalogs=catalogs)
 
 @app.route('/catalog/<catalog_id>', methods=['GET'])
 def catalog_view_handler(catalog_id):
-    username = flask.session.get('username')
+    user = models.get_current_user()
     catalog_id = int(catalog_id)
     catalog = models.get_catalog_by_id(catalog_id)
     if not catalog:
         raise BadRequest('Could not find catalog with id %d!' % catalog_id)
     categories = models.get_categories(catalog_id)
-    return flask.render_template('catalog.html', username=username, catalog=catalog, categories=categories)
+    return flask.render_template('catalog.html', user=user, catalog=catalog, categories=categories)
 
 
 @app.route('/addcatalog', methods=['GET', 'POST'])
 @login.check_logged_in
 def add_catalog_handler():
-    username = flask.session.get('username')
+    user = models.get_current_user()
 
     if flask.request.method == 'GET':
-        return flask.render_template('addcatalog.html', username=username, catalog=None)
+        return flask.render_template('addcatalog.html', user=user, catalog=None)
 
     elif flask.request.method == 'POST':
         try:
             cover_picture_obj = flask.request.files.get('cover_picture')
             cover_picture_url = uploadfile.save_file(cover_picture_obj)
-            owner = login.get_current_user()
 
             new_catalog = models.Catalog(name=flask.request.form.get('name'),
                                          description=flask.request.form.get('description'),
                                          cover_picture=cover_picture_url,
-                                         owner=owner.key)
+                                         owner=user.key)
             new_catalog.put()
             models.wait_for(new_catalog)
             return flask.redirect('/catalog/%d' % new_catalog.key.id())
@@ -53,20 +52,22 @@ def add_catalog_handler():
 def edit_catalog_handler(catalog_id):
     catalog_id = int(catalog_id)
     catalog_entity = models.get_catalog_by_id(catalog_id)
-    username = flask.session.get('username')
+    user = models.get_current_user()
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d!' % catalog_id)
 
-    models.check_user_owns(catalog_entity)
+    if not catalog_entity.user_can_edit(user):
+        raise Unauthorized
 
     if flask.request.method == 'GET':
-        return flask.render_template('editcatalog.html', username=username, catalog=catalog_entity)
+        return flask.render_template('editcatalog.html', user=user, catalog=catalog_entity)
 
     elif flask.request.method == 'POST':
         try:
             cover_picture_obj = flask.request.files.get('cover_picture')
+            cover_picture_url = uploadfile.save_file(cover_picture_obj)
             # TODO: delete old picture
-            catalog_entity.cover_picture = uploadfile.save_file(cover_picture_obj)
+            catalog_entity.cover_picture = uploadfile.save_file(cover_picture_url)
             catalog_entity.name = flask.request.form.get('name')
             catalog_entity.description = flask.request.form.get('description')
 
@@ -79,11 +80,14 @@ def edit_catalog_handler(catalog_id):
 @app.route('/deletecatalog/<catalog_id>', methods=['POST'])
 @login.check_logged_in
 def delete_catalog_handler(catalog_id):
-    username = flask.session.get('username')
     catalog_id = int(catalog_id)
     catalog_entity = models.get_catalog_by_id(catalog_id)
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d!' % catalog_id)
+
+    if not catalog_entity.user_can_edit(models.get_current_user()):
+        raise Unauthorized
+
     models.delete_catalog(catalog_id)
 
     return flask.redirect('/')

@@ -1,17 +1,25 @@
+
 import logging
 from google.appengine.ext import ndb
-from user_login import User, check_user_owns
+import user_login
+import item
+import category
 
 class Catalog(ndb.Model):
     name = ndb.StringProperty(required=True, indexed=True)
     description = ndb.TextProperty(indexed=False)
     cover_picture = ndb.StringProperty(indexed=False)
-    owner = ndb.KeyProperty(kind=User, required=True, indexed=True)
-    editors = ndb.KeyProperty(kind=User, repeated=True, indexed=True)
+    owner = ndb.KeyProperty(kind=user_login.User, required=True, indexed=True)
+    editors = ndb.KeyProperty(kind=user_login.User, repeated=True, indexed=True)
     posted = ndb.DateTimeProperty(auto_now_add=True, indexed=True)
 
     def user_can_edit(self, user):
-        return user == self.owner or user in self.editors
+        user_in_editors = False
+        for editor in self.editors:
+            if editor.get() == user:
+                user_in_editors = True
+                break
+        return user_in_editors or user == self.owner.get()
 
 def get_catalog_by_id(catalog_id):
     if not catalog_id:
@@ -24,9 +32,12 @@ def get_catalogs():
 
 def delete_catalog(catalog_id):
     catalog_entity = get_catalog_by_id(catalog_id)
-    check_user_owns(catalog_entity)
     if not catalog_entity:
         raise ValueError('Catalog not found!')
-    catalog_entity.key.delete()
 
-    # TODO: delete related data
+    for category_entity in category.get_categories(catalog_entity.key.id()):
+        category_entity.key.delete()
+    for item_entity in item.get_items(catalog_entity.key.id()):
+        item_entity.key.delete()
+
+    catalog_entity.key.delete()

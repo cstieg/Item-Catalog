@@ -1,7 +1,7 @@
+"""User Model and related functions"""
+
 import flask
 from google.appengine.ext import ndb
-
-# TODO: Add validators for entity fields
 
 class User(ndb.Model):
     """Users registered to create content and comment and like on the blog"""
@@ -14,9 +14,11 @@ class User(ndb.Model):
     picture = ndb.StringProperty(indexed=False)
 
 def find_user_by_email(email):
+    """Returns the user entity corresponding to an email address"""
     return User.query(User.email == email).get()
 
 def create_user(email, name, provider, picture):
+    """Creates or updates a user entity with the parameters"""
     existing_user = find_user_by_email(email)
 
     if existing_user:
@@ -36,4 +38,5 @@ def create_user(email, name, provider, picture):
         return new_user.put()
 
 def get_current_user():
+    """Returns the user entity currently logged in"""
     return find_user_by_email(flask.session.get('email'))

@@ -27,9 +27,6 @@
     </div>
   </form>
 
-
-
-
   <p id="additem">
     {% if category %}
       <a href="/catalog/{{catalog.key.id()}}/additem?category_id={{category.key.id()}}">Add Item</a>
@@ -37,6 +34,5 @@
       <a href="/catalog/{{catalog.key.id()}}/additem">Add Item</a>
     {% endif %}
   </p>
-
 
 {% endblock content %}

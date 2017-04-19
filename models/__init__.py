@@ -1,11 +1,14 @@
+"""Models of the catalog data"""
+
 import logging
 from time import clock, sleep
+from datetime import date, datetime
 from google.appengine.ext import ndb
 
 from user_login import User, create_user, get_current_user, find_user_by_email
-from item import Item, get_item_by_id, get_items, delete_item
-from category import Category, get_category_by_id, get_categories, delete_category
-from catalog import Catalog, get_catalog_by_id, get_catalogs, delete_catalog
+from item import Item, get_item_by_id, get_items, delete_item, get_item_dict
+from category import Category, get_category_by_id, get_categories, delete_category, get_category_dict
+from catalog import Catalog, get_catalog_by_id, get_catalogs, delete_catalog, get_catalog_dict, get_catalog_list_dict
 
 
 def wait_for(entity, incremental_wait_time=0.100, max_wait_time=2.000):
@@ -27,3 +30,13 @@ def wait_for(entity, incremental_wait_time=0.100, max_wait_time=2.000):
                             clock() < start_time + max_wait_time:
         sleep(incremental_wait_time)
 
+
+def json_serial(obj):
+    """Serializes the properties of the dict representation of a Datastore entity
+    not able to be handled by the regular json.dumps function"""
+    if isinstance(obj, date) or isinstance(obj, datetime):
+        return obj.isoformat()
+    if isinstance(obj, ndb.Key):
+        # return obj.get().to_dict()
+        return ''
+    raise TypeError("Type not serializable!")

@@ -19,12 +19,13 @@
     {% endif %}
   </div>
   <img class="cover-picture" src="{{catalog.cover_picture}}">
-
 </header>
+
 <main class="container">
   {% if categories %}
     {% for category in categories if categories %}
       <div class="category row">
+        <hr>
         <div class="category-label">
           <h2>{{category.name}}</h2>
           <p>{{category.description}}</p>
@@ -40,7 +41,6 @@
             </div>
           {% endif %}
         </div>
-
 
         {% for item in category.get_items() %}
           <article class="item col-md-4 col-sm-6 col-xs-12">

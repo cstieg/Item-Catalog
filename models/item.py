@@ -1,10 +1,14 @@
+"""Item Model and related functions"""
+
 import logging
 from google.appengine.ext import ndb
+
 import user_login
 import category
 import catalog
 
 class Item(ndb.Model):
+    """Model of catalog item"""
     name = ndb.StringProperty(required=True, indexed=True)
     description = ndb.TextProperty(indexed=False)
     price = ndb.FloatProperty(indexed=True)
@@ -15,19 +19,18 @@ class Item(ndb.Model):
     posted = ndb.DateTimeProperty(auto_now_add=True, indexed=True)
 
 def get_item_by_id(catalog_id, item_id):
-    # find catalog
+    """Returns the item entity of a given catalog id and item id"""
     if not catalog_id:
         raise ValueError('catalog_id is required!')
     if not item_id:
         raise ValueError('item_id is required!')
+
     catalog_entity = catalog.get_catalog_by_id(catalog_id)
     if not catalog_entity:
         logging.error('Catalog not found!')
         return None
 
-    # find item
     item_entity = Item.get_by_id(item_id)
-
     if not item_entity:
         logging.error('Item not found!')
         return None
@@ -38,15 +41,16 @@ def get_item_by_id(catalog_id, item_id):
     return item_entity
 
 def get_items(catalog_id, category_id=None):
-    # find catalog
+    """Returns a query of the items of a given catalog, and optionally, a given
+    category in that catalog"""
     if not catalog_id:
         raise ValueError('catalog_id is required!')
+
     catalog_entity = catalog.get_catalog_by_id(catalog_id)
     if not catalog_entity:
         logging.error('Catalog not found!')
         return None
 
-    # find category
     if category_id:
         category_entity = category.get_category_by_id(catalog_id, category_id)
         if not category_entity:
@@ -55,13 +59,16 @@ def get_items(catalog_id, category_id=None):
         if category_entity.catalog != catalog_entity.key:
             logging.error('Category does not match catalog!')
             return None
-        q = Item.query(Item.category == category_entity.key)
-        return q
+        return Item.query(Item.category == category_entity.key)
     else:
         return Item.query(Item.catalog == catalog_entity.key)
 
+def get_item_dict(catalog_id, item_id):
+    """Returns a dict representation of an item of given catalog and item id"""
+    return get_item_by_id(catalog_id, item_id).to_dict()
 
 def delete_item(catalog_id, item_id):
+    """Deletes an item of a given catalog id and item id"""
     if not catalog_id or not item_id:
         raise ValueError('Must pass a valid item!')
     item_entity = Item.get_by_id(item_id)
@@ -69,5 +76,3 @@ def delete_item(catalog_id, item_id):
         raise ValueError('Item not found!')
 
     item_entity.key.delete()
-
-    # TODO: delete related data

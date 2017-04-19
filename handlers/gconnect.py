@@ -1,28 +1,27 @@
-import logging
+"""Login through Google OAuth2"""
+
 import flask
 import json
 import oauth2client.client
 from google.appengine.api import urlfetch
-from werkzeug.exceptions import HTTPException, BadRequest, Unauthorized, InternalServerError
+from werkzeug.exceptions import BadRequest, Unauthorized, InternalServerError
 
+from itemcatalog import app
 import responses
 from models import user_login
-from itemcatalog import app
 
 @app.route('/gconnect', methods=['POST'])
 def google_login_handler():
-
+    """Callback from clientside to exchange Google authorization code for credentials"""
     code = flask.request.data
     try:
         credentials = get_google_credentials(code)
     except oauth2client.client.FlowExchangeError:
         raise Unauthorized('Failed to upgrade the Google authorization code.')
 
-    try:
-        data = get_google_user_info(credentials.access_token)
-    except:
-        raise HTTPException('Error retrieving user info from Google!', response)
+    data = get_google_user_info(credentials.access_token)
 
+    # Store user info in session
     flask.session['provider'] = 'google'
     flask.session['username'] = data['name']
     flask.session['picture'] = data['picture']
@@ -36,7 +35,7 @@ def google_login_handler():
     return responses.success()
 
 def get_google_credentials(code):
-    # Upgrade the authorization code into a credentials object
+    """Upgrades the authorization code into a credentials object"""
     oauth_flow = oauth2client.client.flow_from_clientsecrets('client_secrets.json', scope='')
     oauth_flow.redirect_uri = 'postmessage'
     credentials = oauth_flow.step2_exchange(code)
@@ -46,12 +45,12 @@ def get_google_credentials(code):
     return credentials
 
 def get_google_user_info(access_token):
-    # Get user info
+    """Gets Google user info from access token"""
     response = urlfetch.fetch(
         url='https://www.googleapis.com/oauth2/v2/userinfo?access_token=%s' % access_token,
         method=urlfetch.GET)
 
     if response.status_code >= 400:
-        raise HTTPException('Cannot access user information from Google!', response)
+        raise InternalServerError('Cannot access user information from Google!', response)
 
     return json.loads(response.content)

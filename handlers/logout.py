@@ -1,12 +1,14 @@
+"""Logout handler"""
+
 import logging
 import flask
-import gconnect
-import models
-from werkzeug.exceptions import BadRequest
+
 from itemcatalog import app
+import models
 
 @app.route('/logout', methods=['POST'])
 def logout_handler():
+    """Logs a user out by clearing the session"""
     user = models.get_current_user()
     if not user:
         logging.info('Already logged out!')

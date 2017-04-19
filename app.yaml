@@ -13,7 +13,7 @@ handlers:
   static_dir: img
 
 - url: /.*
-  script: main.app
+  script: itemcatalog.app
 
 libraries:
 - name: jinja2

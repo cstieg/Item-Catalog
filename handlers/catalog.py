@@ -1,4 +1,5 @@
 """Handers for catalogs"""
+import logging
 import flask
 from werkzeug.exceptions import BadRequest, Unauthorized
 from json import dumps
@@ -14,6 +15,7 @@ def main_page_handler():
     """Renders the main page, a list of the available catalogs"""
     user = models.get_current_user()
     catalogs = models.get_catalogs()
+    logging.info(user)
     return flask.render_template('index.html', user=user, catalogs=catalogs)
 
 @app.route('/catalog/<catalog_id>', methods=['GET'])

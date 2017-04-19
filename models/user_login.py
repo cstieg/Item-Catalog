@@ -1,5 +1,4 @@
 """User Model and related functions"""
-
 import flask
 from google.appengine.ext import ndb
 
@@ -15,6 +14,8 @@ class User(ndb.Model):
 
 def find_user_by_email(email):
     """Returns the user entity corresponding to an email address"""
+    if not email:
+        return None
     return User.query(User.email == email).get()
 
 def create_user(email, name, provider, picture):

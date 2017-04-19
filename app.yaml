@@ -1,4 +1,3 @@
-application: itemcatalog-163806
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -14,7 +13,7 @@ handlers:
   static_dir: img
 
 - url: /.*
-  script: itemcatalog.app
+  script: main.app
 
 libraries:
 - name: jinja2

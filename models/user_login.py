@@ -10,7 +10,7 @@ class User(ndb.Model):
     password = ndb.StringProperty(indexed=False)
     signedUp = ndb.DateTimeProperty(auto_now_add=True, indexed=True)
     email = ndb.StringProperty(indexed=True)
-    provider = ndb.StringProperty(indexed=True)
+    provider = ndb.StringProperty(indexed=False)
     picture = ndb.StringProperty(indexed=False)
 
 def find_user_by_email(email):

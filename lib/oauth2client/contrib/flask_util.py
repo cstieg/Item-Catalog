@@ -112,8 +112,8 @@ to the URL returned by :meth:`UserOAuth2.authorize_url`.
 .. code-block:: python
    :emphasize-lines: 3
 
-    @app.route('/user_login')
-    def user_login():
+    @app.route('/login')
+    def login():
         return oauth2.authorize_url("/")
 
 

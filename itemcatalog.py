@@ -19,7 +19,7 @@ GCLOUD_STORAGE_BUCKET = 'itemcatalog-163806.appspot.com'
 
 
 app = flask.Flask(__name__)
-app.secret_key = 'ZAwsBF5SZD6#QzwRnDvakmJ5xp4d7XqRaxX#^V!T'
+app.secret_key = 'd-FL95Q19q7MQmFpd7hHD0Ty'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DEBUG'] = False
 app.config['TESTING'] = False

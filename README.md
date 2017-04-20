@@ -23,8 +23,11 @@ Google's OAuth2 authentication.
     * `cd` to the folder where this repository is located.
     * Install the Python packages necessary for this project by typing
     `python -m pip install -t lib -r requirements.txt` at the prompt.
+    * Set up Datastore emulator with the command `gcloud beta emulators datastore start`.
     * Authenticate to Google Cloud SDK by typing `gcloud auth application-default login`
     and authorizing use of your Google account.
+    * Authorize Google OAuth2 in the API Manager (Credentials).  Enter `http://localhost:8080` in the Authorized JavaScript origins and `http://localhost:8080/gconnect` in the redirect URIs. Download the JSON credentials
+    file and save it as client_secrets.json in the root directory.
     * Type `python dev_appserver.py app.yaml` and hit Enter.
         * Note: it may be necessary to include the full path of dev_appserver if
         it is not included in the Python path.  For example:
@@ -46,7 +49,6 @@ Google's OAuth2 authentication.
     PROJECT_ID = 'itemcatalog-######'
     GCLOUD_STORAGE_BUCKET = 'itemcatalog-######.appspot.com'
     ```
-    * Also substitute your project id and client id into client_secrets.json.
     * Make a client secret of random letters, numbers, and characters, and substitute
     it in itemcatalog.py:
     `app.secret_key = 'ew0j9we093r00923r09i233ff09jweff09'`  <= change this value
@@ -65,6 +67,7 @@ Google's OAuth2 authentication.
 * _app.yaml_ contains configuration information for Google App Engine to be able
 to find the folders and files to run the app.
 * _index.yaml_ contains a list of the indexes to be created.
+* _requirements.txt_ contains a list of the Python packages that need to be installed.
 
 
 ### Python Backend

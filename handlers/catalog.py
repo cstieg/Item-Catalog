@@ -3,9 +3,8 @@ import logging
 import flask
 from werkzeug.exceptions import BadRequest, Unauthorized
 from json import dumps
-from google.appengine.ext import ndb
 
-from itemcatalog import app
+from flaskapp import app
 import models
 import login
 import uploadfile
@@ -23,7 +22,7 @@ def catalog_view_handler(catalog_id):
     """Renders a catalog page
      Parameters:
     - catalog_id: integer id of catalog to be rendered
-    
+
     Returns:
     - HTTP response
     """
@@ -43,7 +42,8 @@ def add_catalog_handler():
     - HTTP response
     """
     user = models.get_current_user()
-
+    print "user: "
+    print user
     if flask.request.method == 'GET':
         # Render add catalog form
         return flask.render_template('addcatalog.html', user=user, catalog=None)
@@ -53,14 +53,12 @@ def add_catalog_handler():
         try:
             cover_picture_obj = flask.request.files.get('cover_picture')
             cover_picture_url = uploadfile.save_file(cover_picture_obj)
+            new_catalog = models.add_catalog(flask.request.form.get('name'),
+                                             flask.request.form.get('description'),
+                                             cover_picture_url,
+                                             user.username)
 
-            new_catalog = models.Catalog(name=flask.request.form.get('name'),
-                                         description=flask.request.form.get('description'),
-                                         cover_picture=cover_picture_url,
-                                         owner=user.key)
-            new_catalog.put()
-            models.wait_for(new_catalog)
-            return flask.redirect('/catalog/%d' % new_catalog.key.id())
+            return flask.redirect('/catalog/%d' % new_catalog.catalog_id)
         except IOError:
             return ('Failed to add new catalog', 401)
 
@@ -70,7 +68,7 @@ def edit_catalog_handler(catalog_id):
     """Edits a catalog
     Parameters:
     - catalog_id: integer id of catalog to edit
-    
+
     Returns:
     - HTTP response
     """
@@ -81,7 +79,7 @@ def edit_catalog_handler(catalog_id):
     # Check parameters
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d!' % catalog_id)
-    if not catalog_entity.user_can_edit(user):
+    if not models.user_can_edit(user.username, catalog_id):
         raise Unauthorized
 
     if flask.request.method == 'GET':
@@ -94,13 +92,13 @@ def edit_catalog_handler(catalog_id):
             cover_picture_obj = flask.request.files.get('cover_picture')
             cover_picture_url = uploadfile.save_file(cover_picture_obj)
             # TODO: delete old picture
-            catalog_entity.cover_picture = uploadfile.save_file(cover_picture_url)
-            catalog_entity.name = flask.request.form.get('name')
-            catalog_entity.description = flask.request.form.get('description')
+            models.edit_catalog(catalog_id,
+                                flask.request.form.get('name'),
+                                flask.request.form.get('description'),
+                                uploadfile.save_file(cover_picture_url),
+                                user.username)
 
-            catalog_entity.put()
-            models.wait_for(catalog_entity)
-            return flask.redirect('/catalog/%d' % catalog_entity.key.id())
+            return flask.redirect('/catalog/%d' % catalog_entity.catalog_id)
         except IOError:
             return ('Failed to edit catalog', 401)
 
@@ -110,17 +108,18 @@ def delete_catalog_handler(catalog_id):
     """Deletes a catalog
     Parameters:
     - catalog_id: integer id of catalog to delete
-    
+
     Returns:
     - HTTP response redirecting to index
     """
     catalog_id = int(catalog_id)
     catalog_entity = models.get_catalog_by_id(catalog_id)
+    user = models.get_current_user()
 
-    # Check parameteres
+    # Check parameters
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d!' % catalog_id)
-    if not catalog_entity.user_can_edit(models.get_current_user()):
+    if not models.user_can_edit(user.username, catalog_id):
         raise Unauthorized
 
     models.delete_catalog(catalog_id)

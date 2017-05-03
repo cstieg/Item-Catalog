@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <meta name="google-signin-client_id" content="1050453128023-lpuo4af45992ivtcf80jqq4gpghka0l0.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
-    <script src="/js/main.js" defer></script>
+    <script src="{{ url_for('static', filename='main.js') }}" defer></script>
   </head>
 
   <body>
@@ -70,5 +70,5 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="/stylesheets/main.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </html>

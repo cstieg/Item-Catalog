@@ -5,7 +5,7 @@
   <h1 class="title-edit">Edit catalog {{catalog.name}}</h1>
 
   <form id="edit-catalog" class="edit-form" method="post"
-      action="/editcatalog/{{catalog.key.id()}}"
+      action="/editcatalog/{{catalog.catalog_id}}"
       enctype="multipart/form-data">
     {% endblock heading %}
     <label>
@@ -25,7 +25,7 @@
       <input name="submit" type="submit" class="bottom-button">
       {% block delete %}
       <button name="delete" class="bottom-button" data-toggle="modal" data-target="#delete-dialog"
-        onclick="setDialogCallback({{catalog.key.id()}})">Delete Catalog</button>
+        onclick="setDialogCallback({{catalog.catalog_id}})">Delete Catalog</button>
       {% endblock delete %}
     </div>
   </form>

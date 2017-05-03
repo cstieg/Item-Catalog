@@ -10,22 +10,22 @@
 
   </div>
   {% for catalog in catalogs %}
-    <article id="{{catalog.key.id()}}" class="catalog col-md-4 col-sm-6 col-xs-12">
-      <a href="/catalog/{{catalog.key.id()}}">
+    <article id="{{catalog.catalog_id}}" class="catalog col-md-4 col-sm-6 col-xs-12">
+      <a href="/catalog/{{catalog.catalog_id}}">
         <img class="catalog-picture" src="{{catalog.cover_picture}}">
       </a>
       <div class="catalog-label">
-        <a href="/catalog/{{catalog.key.id()}}">
+        <a href="/catalog/{{catalog.catalog_id}}">
           <h3>{{catalog.name}}</h3>
         </a>
         <p>{{catalog.description}}</p>
         {% if catalog.user_can_edit(user) %}
           <div class="top-right-button-group">
-            <a href="/editcatalog/{{catalog.key.id()}}"
+            <a href="/editcatalog/{{catalog.catalog_id}}"
                class="edit-button top-right-button-member glyphicon glyphicon-pencil"
                rel="tooltip" title="Edit Catalog"></a>
             <a data-toggle="modal" data-target="#delete-dialog"
-               onclick="setDialogCallback('deleteCatalog({{catalog.key.id()}})')"
+               onclick="setDialogCallback('deleteCatalog({{catalog.catalog_id}})')"
                class="delete-button top-right-button-member"
                rel="tooltip" title="Delete Catalog">X</a>
           </div>

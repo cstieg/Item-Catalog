@@ -26,7 +26,7 @@ def add_category_handler(catalog_id):
     # Check parameters
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
-    if not catalog_entity.user_can_edit(user):
+    if not models.user_can_edit(user.username, catalog_id):
         raise Unauthorized
 
     if flask.request.method == 'GET':
@@ -38,12 +38,11 @@ def add_category_handler(catalog_id):
 
     elif flask.request.method == 'POST':
         # Handle new category submission from form
-        new_category = models.Category(name=flask.request.form.get('name'),
-                                     description=flask.request.form.get('description'),
-                                     catalog=catalog_entity.key)
-        new_category.put()
-        models.wait_for(new_category)
-        return flask.redirect('/catalog/%d' % catalog_entity.key.id())
+        new_category = models.add_category(flask.request.form.get('name'),
+                                           flask.request.form.get('description'),
+                                           catalog_entity.catalog_id)
+
+        return flask.redirect('/catalog/%d' % catalog_entity.catalog_id)
 
 @app.route('/catalog/<catalog_id>/editcategory/<category_id>', methods=['GET', 'POST'])
 @login.check_logged_in
@@ -67,7 +66,7 @@ def edit_category_handler(catalog_id, category_id):
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
     if not (category_entity):
         raise BadRequest('Could not find category with id %d!' % category_id)
-    if not catalog_entity.user_can_edit(user):
+    if not models.user_can_edit(user.username, catalog_id):
         raise Unauthorized
 
     if flask.request.method == 'GET':
@@ -79,13 +78,12 @@ def edit_category_handler(catalog_id, category_id):
 
     elif flask.request.method == 'POST':
         # Handle category edit from form
-        category_entity.name = flask.request.form.get('name')
-        category_entity.description = flask.request.form.get('description')
+        models.edit_category(category_id,
+                             catalog_id,
+                             flask.request.form.get('name'),
+                             flask.request.form.get('description'))
 
-        category_entity.put()
-
-        models.wait_for(category_entity)
-        return flask.redirect('/catalog/%d' % catalog_entity.key.id())
+        return flask.redirect('/catalog/%d' % catalog_entity.catalog_id)
 
 @app.route('/catalog/<catalog_id>/deletecategory/<category_id>', methods=['POST'])
 @login.check_logged_in
@@ -102,19 +100,19 @@ def delete_category_handler(catalog_id, category_id):
     catalog_entity = models.get_catalog_by_id(catalog_id)
     category_id = int(category_id)
     category_entity = models.get_category_by_id(catalog_id, category_id)
+    user = models.get_current_user()
 
     # Check parameters
     if not catalog_entity:
         raise BadRequest('Could not find catalog with id %d' % catalog_id)
     if not (category_entity):
         raise BadRequest('Could not find category with id %d!' % category_id)
-    if not catalog_entity.user_can_edit(models.get_current_user()):
+    if not models.user_can_edit(user.username, catalog_id):
         raise Unauthorized
 
     models.delete_category(catalog_id, category_id)
 
-    models.wait_for(category_entity)
-    return flask.redirect('/catalog/%d' % catalog_entity.key.id())
+    return flask.redirect('/catalog/%d' % catalog_entity.catalog_id)
 
 @app.route('/catalog/<catalog_id>/category/<category_id>/json', methods=['GET'])
 def category_json_endpoint(catalog_id, category_id):

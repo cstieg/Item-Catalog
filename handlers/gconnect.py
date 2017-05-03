@@ -3,7 +3,7 @@
 import flask
 import json
 import oauth2client.client
-from google.appengine.api import urlfetch
+import urllib2
 from werkzeug.exceptions import BadRequest, Unauthorized, InternalServerError
 
 from itemcatalog import app
@@ -46,11 +46,9 @@ def get_google_credentials(code):
 
 def get_google_user_info(access_token):
     """Gets Google user info from access token"""
-    response = urlfetch.fetch(
-        url='https://www.googleapis.com/oauth2/v2/userinfo?access_token=%s' % access_token,
-        method=urlfetch.GET)
+    try:
+        response = urllib2.urlopen(url='https://www.googleapis.com/oauth2/v2/userinfo?access_token=%s' % access_token)
+    except urllib2.URLError:
+        raise InternalServerError('Cannot access user information from Google!')
 
-    if response.status_code >= 400:
-        raise InternalServerError('Cannot access user information from Google!', response)
-
-    return json.loads(response.content)
+    return json.loads(response.read())

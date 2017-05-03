@@ -1,22 +1,39 @@
 """Item Model and related functions"""
 
 import logging
-from google.appengine.ext import ndb
-
-import user_login
+import datetime
 import category
 import catalog
+from database import get_connection, close_connection
 
-class Item(ndb.Model):
-    """Model of catalog item"""
-    name = ndb.StringProperty(required=True, indexed=True)
-    description = ndb.TextProperty(indexed=False)
-    price = ndb.FloatProperty(indexed=True)
-    picture = ndb.StringProperty(indexed=False)
-    owner = ndb.KeyProperty(kind=user_login.User, required=True, indexed=True)
-    catalog = ndb.KeyProperty(kind=catalog.Catalog, required=True, indexed=True)
-    category = ndb.KeyProperty(kind=category.Category, indexed=True)
-    posted = ndb.DateTimeProperty(auto_now_add=True, indexed=True)
+def add_item(name, description, price, picture, owner, catalog_id, category_id):
+    connection, cursor = get_connection()
+    cursor.execute("""INSERT INTO item
+                    (name, description, price, picture, owner, catalog, category, posted)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING *""",
+                    (name, description, price, picture, owner, catalog_id, category_id, datetime.datetime.now()))
+    catalog = cursor.fetchone()
+    connection.commit()
+    close_connection(connection, cursor)
+    return catalog
+
+def edit_item(item_id, name, description, price, picture, catalog_id, category_id):
+    if not get_item_by_id(catalog_id, item_id):
+        raise ValueError('Item id not found!')
+
+    connection, cursor = get_connection()
+    cursor.execute("""UPDATE item SET 
+                    name = %s,
+                    description = %s,
+                    price = %s,
+                    picture = %s,
+                    category = %s
+                    WHERE item_id = %s""",
+                    (name, description, price, picture, category_id, item_id))
+    connection.commit()
+    close_connection(connection, cursor)
+
 
 def get_item_by_id(catalog_id, item_id):
     """Returns the item entity of a given catalog id and item id"""
@@ -30,15 +47,14 @@ def get_item_by_id(catalog_id, item_id):
         logging.error('Catalog not found!')
         return None
 
-    item_entity = Item.get_by_id(item_id)
-    if not item_entity:
-        logging.error('Item not found!')
-        return None
-    if item_entity.catalog != catalog_entity.key:
-        logging.error('Item does not match catalog!')
-        return None
+    connection, cursor = get_connection()
+    cursor.execute("""SELECT * FROM item
+                    WHERE catalog = %s AND item_id = %s""", (catalog_id, item_id))
 
-    return item_entity
+    item = cursor.fetchone()
+    close_connection(connection, cursor)
+
+    return item
 
 def get_items(catalog_id, category_id=None):
     """Returns a query of the items of a given catalog, and optionally, a given
@@ -51,28 +67,34 @@ def get_items(catalog_id, category_id=None):
         logging.error('Catalog not found!')
         return None
 
+    connection, cursor = get_connection()
     if category_id:
         category_entity = category.get_category_by_id(catalog_id, category_id)
         if not category_entity:
             logging.error('Category not found!')
             return None
-        if category_entity.catalog != catalog_entity.key:
-            logging.error('Category does not match catalog!')
-            return None
-        return Item.query(Item.category == category_entity.key)
+
+        cursor.execute("""SELECT * FROM item
+                        WHERE catalog = %s AND category = %s""", (catalog_id, category_id))
     else:
-        return Item.query(Item.catalog == catalog_entity.key)
+        cursor.execute("""SELECT * FROM item
+                        WHERE catalog = %s""", (catalog_id))
+
+    items = cursor.fetchall()
+    close_connection(connection, cursor)
+    return items
 
 def get_item_dict(catalog_id, item_id):
     """Returns a dict representation of an item of given catalog and item id"""
-    return get_item_by_id(catalog_id, item_id).to_dict()
+    return get_item_by_id(catalog_id, item_id)
 
 def delete_item(catalog_id, item_id):
     """Deletes an item of a given catalog id and item id"""
     if not catalog_id or not item_id:
         raise ValueError('Must pass a valid item!')
-    item_entity = Item.get_by_id(item_id)
-    if not item_entity:
-        raise ValueError('Item not found!')
 
-    item_entity.key.delete()
+    connection, cursor = get_connection()
+    cursor.execute("""DELETE FROM item
+                    WHERE catalog = %s AND item_id = %s""", (catalog_id, item_id))
+    connection.commit()
+    close_connection(connection, cursor)

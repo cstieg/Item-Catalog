@@ -6,13 +6,13 @@
     <p>
       {{catalog.description}}
     </p>
-    {% if catalog.user_can_edit(user) %}
+    {% if user_can_edit(user.username, catalog.catalog_id) %}
       <div class="top-right-button-group">
-        <a href="/editcatalog/{{catalog.key.id()}}"
+        <a href="/editcatalog/{{catalog.catalog_id}}"
            class="edit-button top-right-button-member glyphicon glyphicon-pencil"
            rel="tooltip" title="Edit Catalog"></a>
         <a data-toggle="modal" data-target="#delete-dialog"
-           onclick="setDialogCallback('deleteCatalog({{catalog.key.id()}})')"
+           onclick="setDialogCallback('deleteCatalog({{catalog.catalog_id}})')"
            class="delete-button top-right-button-member"
            rel="tooltip" title="Delete Catalog">X</a>
       </div>
@@ -29,33 +29,33 @@
         <div class="category-label">
           <h2>{{category.name}}</h2>
           <p>{{category.description}}</p>
-          {% if catalog.user_can_edit(user) %}
+          {% if user_can_edit(user.username, catalog.catalog_id) %}
             <div class="top-right-button-group">
-              <a href="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
+              <a href="/catalog/{{catalog.catalog_id}}/editcategory/{{category.category_id}}"
                  class="edit-button top-right-button-member glyphicon glyphicon-pencil"
                  rel="tooltip" title="Edit Category"></a>
               <a data-toggle="modal" data-target="#delete-dialog"
-                 onclick="setDialogCallback('deleteCategory({{catalog.key.id()}}, {{category.key.id()}})')"
+                 onclick="setDialogCallback('deleteCategory({{catalog.catalog_id}}, {{category.category_id}})')"
                  class="delete-button top-right-button-member"
                  rel="tooltip" title="Delete Category">X</a>
             </div>
           {% endif %}
         </div>
 
-        {% for item in category.get_items() %}
+        {% for item in get_items_in_category(catalog.catalog_id, category.category_id) %}
           <article class="item col-md-4 col-sm-6 col-xs-12">
             <img class="item-picture" src="{{item.picture}}">
             <div class="item-label">
               <h3>{{item.name}}</h3>
               <p>{{item.description}}</p>
-              <p>Price: {{'%0.2f' % item.price}}</p>
-              {% if catalog.user_can_edit(user) %}
+              <p>Price: {{item.price}}</p>
+                {% if user_can_edit(user.username, catalog.catalog_id) %}
                   <div class="top-right-button-group">
-                    <a href="/catalog/{{catalog.key.id()}}/edititem/{{item.key.id()}}"
+                    <a href="/catalog/{{catalog.catalog_id}}/edititem/{{item.item_id}}"
                        class="edit-button top-right-button-member glyphicon glyphicon-pencil"
                        rel="tooltip" title="Edit Item"></a>
                     <a data-toggle="modal" data-target="#delete-dialog"
-                       onclick="setDialogCallback('deleteItem({{catalog.key.id()}}, {{item.key.id()}})')"
+                       onclick="setDialogCallback('deleteItem({{catalog.catalog_id}}, {{item.item_id}})')"
                        class="delete-button top-right-button-member"
                    rel="tooltip" title="Delete Item">X</a>
                  </div>
@@ -69,11 +69,11 @@
   {% endif %}
 
   <p id="addcategory">
-    <a href="/catalog/{{catalog.key.id()}}/addcategory">Add Category</a>
+    <a href="/catalog/{{catalog.catalog_id}}/addcategory">Add Category</a>
   </p>
 
   <p id="additem">
-    <a href="/catalog/{{catalog.key.id()}}/additem">Add Item</a>
+    <a href="/catalog/{{catalog.catalog_id}}/additem">Add Item</a>
   </p>
 </main>
 {% endblock content %}

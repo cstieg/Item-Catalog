@@ -5,10 +5,10 @@
   <h2 class="title-edit">Edit category {{category.name}} in {{catalog.name}}</h2>
 
   <form id="edit-category" class="edit-form" method="post"
-      action="/catalog/{{catalog.key.id()}}/editcategory/{{category.key.id()}}"
+      action="/catalog/{{catalog.catalog_id}}/editcategory/{{category.category_id}}"
       enctype="multipart/form-data">
     {% endblock heading %}
-    <input name="catalog_id" type="hidden" value="{{catalog.key.id()}}">
+    <input name="catalog_id" type="hidden" value="{{catalog.catalog_id}}">
     <label>
       <p>Name</p>
       <input name="name" type="text" value="{{category.name}}" required>
@@ -22,16 +22,16 @@
       <input name="submit" type="submit" class="bottom-button">
       {% block delete %}
         <button name="delete" class="bottom-button" data-toggle="modal" data-target="#delete-dialog"
-          onclick="setDialogCallback('deleteCategory({{catalog.key.id()}}, {{category.key.id()}})')">Delete Category</button>
+          onclick="setDialogCallback('deleteCategory({{catalog.catalog_id}}, {{category.category_id}})')">Delete Category</button>
       {% endblock delete %}
     </div>
   </form>
 
   <p id="additem">
     {% if category %}
-      <a href="/catalog/{{catalog.key.id()}}/additem?category_id={{category.key.id()}}">Add Item</a>
+      <a href="/catalog/{{catalog.catalog_id}}/additem?category_id={{category.category_id}}">Add Item</a>
     {% else %}
-      <a href="/catalog/{{catalog.key.id()}}/additem">Add Item</a>
+      <a href="/catalog/{{catalog.catalog_id}}/additem">Add Item</a>
     {% endif %}
   </p>
 

@@ -5,8 +5,8 @@ from werkzeug.exceptions import BadRequest, Unauthorized
 from json import dumps
 
 from flaskapp import app
+from decorators import check_logged_in
 import models
-import login
 import uploadfile
 
 @app.route('/', methods=['GET'])
@@ -35,7 +35,7 @@ def catalog_view_handler(catalog_id):
     return flask.render_template('catalog.html', user=user, catalog=catalog, categories=categories)
 
 @app.route('/addcatalog', methods=['GET', 'POST'])
-@login.check_logged_in
+@check_logged_in
 def add_catalog_handler():
     """Adds a catalog
     Returns:
@@ -63,7 +63,7 @@ def add_catalog_handler():
             return ('Failed to add new catalog', 401)
 
 @app.route('/editcatalog/<catalog_id>', methods=['GET', 'POST'])
-@login.check_logged_in
+@check_logged_in
 def edit_catalog_handler(catalog_id):
     """Edits a catalog
     Parameters:
@@ -103,7 +103,7 @@ def edit_catalog_handler(catalog_id):
             return ('Failed to edit catalog', 401)
 
 @app.route('/deletecatalog/<catalog_id>', methods=['POST'])
-@login.check_logged_in
+@check_logged_in
 def delete_catalog_handler(catalog_id):
     """Deletes a catalog
     Parameters:

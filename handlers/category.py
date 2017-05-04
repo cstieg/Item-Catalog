@@ -6,11 +6,11 @@ from json import dumps
 
 from itemcatalog import app
 import models
-import login
+from decorators import check_logged_in
 
 
 @app.route('/catalog/<catalog_id>/addcategory', methods=['GET', 'POST'])
-@login.check_logged_in
+@check_logged_in
 def add_category_handler(catalog_id):
     """Adds a category to a catalog
     Parameters:
@@ -45,7 +45,7 @@ def add_category_handler(catalog_id):
         return flask.redirect('/catalog/%d' % catalog_entity.catalog_id)
 
 @app.route('/catalog/<catalog_id>/editcategory/<category_id>', methods=['GET', 'POST'])
-@login.check_logged_in
+@check_logged_in
 def edit_category_handler(catalog_id, category_id):
     """Edits a category in a catalog
     Parameters:
@@ -86,7 +86,7 @@ def edit_category_handler(catalog_id, category_id):
         return flask.redirect('/catalog/%d' % catalog_entity.catalog_id)
 
 @app.route('/catalog/<catalog_id>/deletecategory/<category_id>', methods=['POST'])
-@login.check_logged_in
+@check_logged_in
 def delete_category_handler(catalog_id, category_id):
     """Deletes a category in a catalog
     Parameters:

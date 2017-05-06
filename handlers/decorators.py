@@ -1,4 +1,6 @@
 import flask
+from functools import wraps
+
 
 def check_logged_in(func):
     """Decorator to check whether user is logged in.  If not logged in, redirects

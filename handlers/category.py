@@ -4,7 +4,7 @@ import flask
 from werkzeug.exceptions import BadRequest, Unauthorized
 from json import dumps
 
-from itemcatalog import app
+from flaskapp import app
 import models
 from decorators import check_logged_in
 

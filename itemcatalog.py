@@ -15,9 +15,7 @@ import logging
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'uploads')
 
-# Update these constants with ids supplied by Google App Engine
-PROJECT_ID = 'itemcatalog-163806'
-GCLOUD_STORAGE_BUCKET = 'itemcatalog-163806.appspot.com'
+
 
 
 from flaskapp import app

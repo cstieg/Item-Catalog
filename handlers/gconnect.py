@@ -6,7 +6,7 @@ import oauth2client.client
 import urllib2
 from werkzeug.exceptions import BadRequest, Unauthorized, InternalServerError
 
-from itemcatalog import app
+from flaskapp import app
 import responses
 from models import user_login
 

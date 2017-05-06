@@ -1,9 +1,8 @@
 """Login handler"""
 import logging
 import flask
-from functools import wraps
 
-from itemcatalog import app
+from flaskapp import app
 
 @app.route('/login', methods=['GET'])
 def login_handler():

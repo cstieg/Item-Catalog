@@ -18,8 +18,9 @@ from google.cloud import storage
 import six
 from werkzeug import secure_filename
 
-from itemcatalog import PROJECT_ID, GCLOUD_STORAGE_BUCKET
-
+# Update these constants with ids supplied by Google App Engine
+PROJECT_ID = 'itemcatalog-163806'
+GCLOUD_STORAGE_BUCKET = 'itemcatalog-163806.appspot.com'
 
 def _safe_filename(filename):
     """

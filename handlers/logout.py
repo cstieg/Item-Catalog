@@ -3,7 +3,7 @@
 import logging
 import flask
 
-from itemcatalog import app
+from flaskapp import app
 import models
 
 @app.route('/logout', methods=['POST'])

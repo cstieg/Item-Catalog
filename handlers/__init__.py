@@ -11,7 +11,7 @@ from uploadfile import save_file
 
 from responses import success
 
-from itemcatalog import app
+from flaskapp import app
 
 import models
 
